@@ -126,6 +126,15 @@ export const Footer: React.FC<FooterProps> = ({
                   Rental Terms &amp; Insurance
                 </button>
               </li>
+              <li>
+                <Link
+                  href="/admin"
+                  className="hover:text-orange-400 text-orange-300 font-semibold transition-colors flex items-center gap-1"
+                >
+                  <span>Admin Dashboard</span>
+                  <span className="text-[9px] bg-orange-600/30 text-orange-400 px-1 py-0.2 rounded">Desk</span>
+                </Link>
+              </li>
             </ul>
           </div>
 

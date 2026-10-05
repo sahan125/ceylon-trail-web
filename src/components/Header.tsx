@@ -146,6 +146,16 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuoteModal }) => {
               ))}
             </div>
 
+            {/* Admin Portal Link */}
+            <Link
+              href="/admin"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-slate-950 hover:bg-slate-50 text-xs font-semibold transition-all"
+              title="Admin Portal"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-orange-500" />
+              <span>Admin</span>
+            </Link>
+
             {/* Instant Quote CTA */}
             <button
               onClick={() => onOpenQuoteModal()}
@@ -189,6 +199,14 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuoteModal }) => {
                 {link.name}
               </a>
             ))}
+            <Link
+              href="/admin"
+              onClick={() => setMobileMenuOpen(false)}
+              className="py-1 text-orange-600 font-bold hover:underline flex items-center gap-1.5"
+            >
+              <ShieldCheck className="w-4 h-4" />
+              <span>Admin Portal</span>
+            </Link>
           </nav>
           <div className="mt-4 pt-4 border-t border-slate-100 flex flex-col gap-3">
             <a
