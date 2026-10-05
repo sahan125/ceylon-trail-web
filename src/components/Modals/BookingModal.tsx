@@ -70,6 +70,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    let bookingRef = `REQ-${Date.now().toString().slice(-4)}`;
 
     try {
       // 1. Insert into Supabase 'bookings' table
@@ -92,39 +93,47 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
         if (supabaseError) {
           console.warn("Supabase insertion notice:", supabaseError.message);
-        } else {
-          console.log("Successfully inserted into Supabase bookings:", supabaseData);
+        } else if (supabaseData && supabaseData[0]?.id) {
+          bookingRef = String(supabaseData[0].id);
+          console.log("Successfully inserted into Supabase bookings with ID:", bookingRef);
         }
       } catch (sbErr) {
         console.warn("Supabase insert error:", sbErr);
       }
 
       // 2. Post to backend Admin Store API
-      const response = await fetch("/api/bookings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          clientName: fullName,
-          phone: whatsappNumber,
-          email: email || "Not provided",
-          vehicleId: currentCar.id,
-          vehicleName: currentCar.name,
-          vehicleCategory: currentCar.category,
-          rentalType,
-          location,
-          pickupDate,
-          pickupTime,
-          returnDate,
-          returnTime,
-          days: daysDiff,
-          totalCost: total,
-          needAacPermit,
-          notes,
-        }),
-      });
+      try {
+        const response = await fetch("/api/bookings", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            clientName: fullName,
+            phone: whatsappNumber,
+            email: email || "Not provided",
+            vehicleId: currentCar.id,
+            vehicleName: currentCar.name,
+            vehicleCategory: currentCar.category,
+            rentalType,
+            location,
+            pickupDate,
+            pickupTime,
+            returnDate,
+            returnTime,
+            days: daysDiff,
+            totalCost: total,
+            needAacPermit,
+            notes,
+          }),
+        });
 
-      const result = await response.json();
-      const bookingRef = result?.data?.id || `REQ-${Date.now().toString().slice(-4)}`;
+        const result = await response.json();
+        if (!bookingRef && result?.data?.id) {
+          bookingRef = result.data.id;
+        }
+      } catch (apiErr) {
+        console.warn("Local API backup notice:", apiErr);
+      }
+
       setCreatedBookingId(bookingRef);
       setSubmitSuccess(true);
 

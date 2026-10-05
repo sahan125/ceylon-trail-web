@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useTransition } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Car,
@@ -19,16 +19,18 @@ import {
   FileBadge,
   ArrowLeft,
   DollarSign,
-  TrendingUp,
   UserCheck,
   Plus,
   Trash2,
   Eye,
   X,
   Check,
+  Database,
+  Radio,
 } from "lucide-react";
 import { Booking, BookingStatus, BookingStats } from "@/types/booking";
 import { VEHICLES } from "@/data/mockData";
+import { supabase } from "@/lib/supabase";
 
 export default function AdminDashboardPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -45,7 +47,7 @@ export default function AdminDashboardPage() {
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [isNewBookingModalOpen, setIsNewBookingModalOpen] = useState(false);
-  const [isPendingAction, startTransition] = useTransition();
+  const [supabaseStatus, setSupabaseStatus] = useState<"connected" | "fallback" | "syncing">("syncing");
 
   // New manual booking form state
   const [newClientName, setNewClientName] = useState("");
@@ -66,18 +68,73 @@ export default function AdminDashboardPage() {
     }, 4000);
   };
 
+  const calculateStats = (items: Booking[]) => {
+    const total = items.length;
+    const pending = items.filter((b) => b.status === "Pending").length;
+    const confirmed = items.filter((b) => b.status === "Confirmed").length;
+    const cancelled = items.filter((b) => b.status === "Cancelled").length;
+    const totalRevenue = items
+      .filter((b) => b.status === "Confirmed")
+      .reduce((sum, b) => sum + (Number(b.totalCost) || 0), 0);
+
+    setStats({ total, pending, confirmed, cancelled, totalRevenue });
+  };
+
+  // Fetch bookings directly from Supabase 'bookings' table
   const fetchBookings = async () => {
     setLoading(true);
+
+    try {
+      // 1. Primary: Direct Supabase query
+      const { data: sbData, error: sbError } = await supabase
+        .from("bookings")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (!sbError && sbData && sbData.length > 0) {
+        // Map Supabase rows to normalized Booking model
+        const normalized: Booking[] = sbData.map((row: any) => ({
+          id: String(row.id),
+          clientName: row.full_name || row.clientName || "Guest",
+          phone: row.phone || "",
+          email: row.email || "Not provided",
+          vehicleId: row.vehicleId || "vehicle",
+          vehicleName: row.vehicle || row.vehicleName || "Vehicle",
+          vehicleCategory: row.vehicle_category || row.vehicleCategory || "Tourist Car",
+          rentalType: row.rental_type || row.rentalType || "self",
+          location: row.pickup_location || row.location || "BIA Airport",
+          pickupDate: row.pickup_date || row.pickupDate || "",
+          pickupTime: row.pickup_time || row.pickupTime || "10:00 AM",
+          returnDate: row.return_date || row.returnDate || "",
+          returnTime: row.return_time || row.returnTime || "04:00 PM",
+          days: Number(row.days) || 1,
+          totalCost: Number(row.total_cost || row.totalCost) || 0,
+          needAacPermit: Boolean(row.need_aac_permit || row.needAacPermit),
+          notes: row.notes || "",
+          status: (row.status as BookingStatus) || "Pending",
+          createdAt: row.created_at || row.createdAt || new Date().toISOString(),
+        }));
+
+        setBookings(normalized);
+        calculateStats(normalized);
+        setSupabaseStatus("connected");
+        return;
+      }
+    } catch (err) {
+      console.warn("Direct Supabase query exception:", err);
+    }
+
+    // 2. Fallback: Local API mirror
     try {
       const res = await fetch("/api/bookings");
       const json = await res.json();
-      if (json.success) {
+      if (json.success && json.data) {
         setBookings(json.data);
-        setStats(json.stats);
+        calculateStats(json.data);
+        setSupabaseStatus("fallback");
       }
     } catch (err) {
-      console.error("Failed to load bookings:", err);
-      showToast("Error connecting to bookings API");
+      console.error("Local API fetch failed:", err);
     } finally {
       setLoading(false);
     }
@@ -85,51 +142,100 @@ export default function AdminDashboardPage() {
 
   useEffect(() => {
     fetchBookings();
+
+    // Set up Real-Time subscription on Supabase 'bookings' table
+    try {
+      const channel = supabase
+        .channel("bookings-realtime-admin")
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "bookings" },
+          (payload) => {
+            console.log("Supabase Real-Time Event:", payload);
+            fetchBookings();
+            showToast("Real-time update received from Supabase!");
+          }
+        )
+        .subscribe((status) => {
+          if (status === "SUBSCRIBED") {
+            setSupabaseStatus("connected");
+          }
+        });
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    } catch (err) {
+      console.warn("Real-time subscription error:", err);
+    }
   }, []);
 
+  // Update status directly in Supabase
   const handleUpdateStatus = async (id: string, newStatus: BookingStatus) => {
+    // Optimistic UI update
+    const updatedList = bookings.map((b) =>
+      b.id === id ? { ...b, status: newStatus } : b
+    );
+    setBookings(updatedList);
+    calculateStats(updatedList);
+
+    // 1. Direct Supabase update
     try {
-      const res = await fetch(`/api/bookings/${id}`, {
+      const { error: sbError } = await supabase
+        .from("bookings")
+        .update({ status: newStatus })
+        .eq("id", id);
+
+      if (sbError) {
+        console.warn("Supabase status update error:", sbError.message);
+      } else {
+        console.log(`Supabase record ${id} status updated to ${newStatus}`);
+      }
+    } catch (err) {
+      console.warn("Supabase update error:", err);
+    }
+
+    // 2. Local mirror update
+    try {
+      await fetch(`/api/bookings/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       });
-      const json = await res.json();
-
-      if (json.success) {
-        // Optimistically update list & stats
-        setBookings((prev) =>
-          prev.map((b) => (b.id === id ? { ...b, status: newStatus } : b))
-        );
-        showToast(`Booking ${id} marked as ${newStatus}`);
-        fetchBookings(); // refresh stats accurately
-      } else {
-        showToast(json.error || "Failed to update status");
-      }
     } catch (err) {
-      console.error(err);
-      showToast("Error updating status");
+      console.warn("API mirror update error:", err);
     }
+
+    showToast(`Booking ${id} status updated to ${newStatus}`);
   };
 
+  // Delete directly from Supabase
   const handleDeleteBooking = async (id: string) => {
     if (!window.confirm(`Are you sure you want to delete booking ${id}?`)) {
       return;
     }
+
+    // Optimistic UI update
+    const filtered = bookings.filter((b) => b.id !== id);
+    setBookings(filtered);
+    calculateStats(filtered);
+
+    // 1. Direct Supabase delete
     try {
-      const res = await fetch(`/api/bookings/${id}`, { method: "DELETE" });
-      const json = await res.json();
-      if (json.success) {
-        setBookings((prev) => prev.filter((b) => b.id !== id));
-        showToast(`Booking ${id} deleted`);
-        fetchBookings();
-      }
+      await supabase.from("bookings").delete().eq("id", id);
     } catch (err) {
-      console.error(err);
-      showToast("Error deleting booking");
+      console.warn("Supabase delete error:", err);
     }
+
+    // 2. Local mirror delete
+    try {
+      await fetch(`/api/bookings/${id}`, { method: "DELETE" });
+    } catch (err) {}
+
+    showToast(`Booking ${id} deleted`);
   };
 
+  // Create manual booking in Supabase
   const handleCreateManualBooking = async (e: React.FormEvent) => {
     e.preventDefault();
     const car = VEHICLES.find((v) => v.id === newCarId) || VEHICLES[0];
@@ -141,14 +247,33 @@ export default function AdminDashboardPage() {
       (newRentalType === "chauffeur" ? 25 * days : 0) +
       (newAacPermit ? 40 : 0);
 
+    const newRecord = {
+      full_name: newClientName,
+      email: newEmail || "Not provided",
+      phone: newPhone,
+      vehicle: car.name,
+      pickup_date: newPickupDate,
+      return_date: newReturnDate,
+      pickup_location: newLocation,
+      status: "Pending",
+    };
+
+    // 1. Direct Supabase insert
     try {
-      const res = await fetch("/api/bookings", {
+      await supabase.from("bookings").insert([newRecord]);
+    } catch (err) {
+      console.warn("Supabase manual insert error:", err);
+    }
+
+    // 2. Local API sync
+    try {
+      await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           clientName: newClientName,
           phone: newPhone,
-          email: newEmail || "Not provided",
+          email: newEmail,
           vehicleId: car.id,
           vehicleName: car.name,
           vehicleCategory: car.category,
@@ -164,36 +289,30 @@ export default function AdminDashboardPage() {
           notes: newNotes,
         }),
       });
+    } catch (err) {}
 
-      const json = await res.json();
-      if (json.success) {
-        showToast("New manual booking created successfully!");
-        setIsNewBookingModalOpen(false);
-        // Reset form
-        setNewClientName("");
-        setNewPhone("");
-        setNewEmail("");
-        setNewNotes("");
-        fetchBookings();
-      }
-    } catch (err) {
-      console.error(err);
-      showToast("Error creating booking");
-    }
+    showToast("New manual reservation created successfully!");
+    setIsNewBookingModalOpen(false);
+    setNewClientName("");
+    setNewPhone("");
+    setNewEmail("");
+    setNewNotes("");
+    fetchBookings();
   };
 
   const filteredBookings = bookings.filter((b) => {
     const matchesTab = activeTab === "All" ? true : b.status === activeTab;
     const q = searchQuery.toLowerCase().trim();
     if (!q) return matchesTab;
-    const matchesSearch =
-      b.clientName.toLowerCase().includes(q) ||
-      b.phone.toLowerCase().includes(q) ||
-      b.email.toLowerCase().includes(q) ||
-      b.vehicleName.toLowerCase().includes(q) ||
-      b.location.toLowerCase().includes(q) ||
-      b.id.toLowerCase().includes(q);
-    return matchesTab && matchesSearch;
+    return (
+      matchesTab &&
+      (b.clientName.toLowerCase().includes(q) ||
+        b.phone.toLowerCase().includes(q) ||
+        b.email.toLowerCase().includes(q) ||
+        b.vehicleName.toLowerCase().includes(q) ||
+        b.location.toLowerCase().includes(q) ||
+        b.id.toLowerCase().includes(q))
+    );
   });
 
   const getStatusBadge = (status: BookingStatus) => {
@@ -257,8 +376,30 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
-          {/* Right Actions */}
+          {/* Right Actions & Supabase Indicator */}
           <div className="flex items-center gap-3">
+            {/* Supabase Status Pill */}
+            <div
+              className={`hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold border ${
+                supabaseStatus === "connected"
+                  ? "bg-emerald-950/60 border-emerald-500/40 text-emerald-300"
+                  : "bg-slate-800 border-slate-700 text-slate-300"
+              }`}
+              title={
+                supabaseStatus === "connected"
+                  ? "Direct Supabase live sync connected"
+                  : "Local synchronization fallback active"
+              }
+            >
+              <Database className="w-3 h-3 text-emerald-400" />
+              <span>{supabaseStatus === "connected" ? "Supabase Live" : "Database Ready"}</span>
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  supabaseStatus === "connected" ? "bg-emerald-400 animate-pulse" : "bg-amber-400"
+                }`}
+              />
+            </div>
+
             <button
               onClick={() => setIsNewBookingModalOpen(true)}
               className="flex items-center gap-1.5 bg-[#EA580C] hover:bg-[#C2410C] text-white px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer"
@@ -271,7 +412,7 @@ export default function AdminDashboardPage() {
               onClick={fetchBookings}
               disabled={loading}
               className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors border border-slate-700 cursor-pointer"
-              title="Refresh Bookings"
+              title="Refresh Bookings from Supabase"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
             </button>
@@ -301,7 +442,7 @@ export default function AdminDashboardPage() {
                 {stats.total}
               </div>
               <span className="text-[11px] text-slate-400 mt-1 block">
-                All-time customer requests
+                Supabase synced bookings
               </span>
             </div>
             <div className="w-12 h-12 rounded-2xl bg-slate-100 text-slate-800 flex items-center justify-center">
@@ -420,11 +561,13 @@ export default function AdminDashboardPage() {
         {/* 3. Bookings List / Table */}
         <section className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
           <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-900">
-              Incoming Rental Requests ({filteredBookings.length})
-            </h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-900">
+                Incoming Rental Requests ({filteredBookings.length})
+              </h2>
+            </div>
             <span className="text-xs text-slate-500 font-medium">
-              Real-time synchronization with customer web form
+              Direct Supabase &apos;bookings&apos; table synchronization
             </span>
           </div>
 
@@ -437,8 +580,8 @@ export default function AdminDashboardPage() {
                 No rental requests found
               </h3>
               <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                No bookings match your selected filter. New submissions from the website will appear
-                here instantly.
+                No bookings match your selected filter. Submissions from the car rental form will
+                insert directly here into Supabase.
               </p>
             </div>
           ) : (
@@ -465,7 +608,7 @@ export default function AdminDashboardPage() {
                       {/* Ref & Date */}
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         <span className="font-bold text-slate-900 block font-mono">
-                          {b.id}
+                          #{b.id}
                         </span>
                         <span className="text-[10px] text-slate-400">
                           {new Date(b.createdAt).toLocaleDateString("en-GB", {
@@ -573,7 +716,7 @@ export default function AdminDashboardPage() {
                             <button
                               onClick={() => handleUpdateStatus(b.id, "Confirmed")}
                               className="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[11px] font-bold transition-all shadow-xs flex items-center gap-1 cursor-pointer"
-                              title="Confirm Reservation"
+                              title="Update status to Confirmed in Supabase"
                             >
                               <Check className="w-3.5 h-3.5" />
                               <span>Confirm</span>
@@ -585,7 +728,7 @@ export default function AdminDashboardPage() {
                             <button
                               onClick={() => handleUpdateStatus(b.id, "Cancelled")}
                               className="px-2.5 py-1.5 bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-700 rounded-lg text-[11px] font-semibold transition-all border border-slate-200 cursor-pointer"
-                              title="Cancel Reservation"
+                              title="Update status to Cancelled in Supabase"
                             >
                               <X className="w-3.5 h-3.5" />
                               <span>Cancel</span>
@@ -595,12 +738,12 @@ export default function AdminDashboardPage() {
                           {/* Direct WhatsApp Reply */}
                           <a
                             href={`https://wa.me/${b.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                              `Hello ${b.clientName}! This is Ceylon Trail Car Rentals regarding your booking ${b.id} for the ${b.vehicleName} (${b.pickupDate} to ${b.returnDate}).`
+                              `Hello ${b.clientName}! This is Ceylon Trail Car Rentals regarding your booking #${b.id} for the ${b.vehicleName} (${b.pickupDate} to ${b.returnDate}).`
                             )}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-200 transition-colors"
-                            title="Reply on WhatsApp"
+                            title="Reply to Client on WhatsApp"
                           >
                             <MessageCircle className="w-4 h-4 fill-emerald-600 text-white" />
                           </a>
@@ -618,7 +761,7 @@ export default function AdminDashboardPage() {
                           <button
                             onClick={() => handleDeleteBooking(b.id)}
                             className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
-                            title="Delete Request"
+                            title="Delete Record from Supabase"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -640,7 +783,7 @@ export default function AdminDashboardPage() {
             <div className="flex items-start justify-between pb-3 border-b border-slate-100">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
-                  {selectedBooking.id}
+                  Booking #{selectedBooking.id}
                 </span>
                 <h3 className="text-xl font-black text-slate-900 tracking-tight">
                   {selectedBooking.clientName}
@@ -745,7 +888,7 @@ export default function AdminDashboardPage() {
                 }}
                 className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider cursor-pointer"
               >
-                Confirm Booking
+                Confirm Booking in Supabase
               </button>
               <button
                 onClick={() => {
@@ -767,7 +910,7 @@ export default function AdminDashboardPage() {
           <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl border border-slate-200">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <h3 className="text-lg font-black text-slate-900 tracking-tight">
-                Create In-Person / Phone Reservation
+                Create Reservation in Supabase
               </h3>
               <button
                 onClick={() => setIsNewBookingModalOpen(false)}
@@ -904,7 +1047,7 @@ export default function AdminDashboardPage() {
                   type="submit"
                   className="flex-1 bg-[#EA580C] hover:bg-[#C2410C] text-white py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-md cursor-pointer"
                 >
-                  Save Reservation
+                  Save to Supabase
                 </button>
                 <button
                   type="button"
