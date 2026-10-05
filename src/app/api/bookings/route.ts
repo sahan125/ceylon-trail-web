@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getBookings, createBooking, getBookingStats } from "@/lib/bookingsStore";
 import { BookingStatus } from "@/types/booking";
+import { supabase } from "@/lib/supabase";
 
 export async function GET(request: Request) {
   try {
@@ -93,6 +94,27 @@ export async function POST(request: Request) {
       needAacPermit: Boolean(needAacPermit),
       notes: notes || "",
     });
+
+    // Also persist to Supabase 'bookings' table
+    try {
+      const { error: sbErr } = await supabase.from("bookings").insert([
+        {
+          full_name: clientName,
+          email: email || "Not provided",
+          phone: phone,
+          vehicle: vehicleName || "Vehicle",
+          pickup_date: pickupDate,
+          return_date: returnDate,
+          pickup_location: location || "Bandaranaike Intl. Airport (BIA)",
+          status: "Pending",
+        },
+      ]);
+      if (sbErr) {
+        console.warn("Supabase server insert warning:", sbErr.message);
+      }
+    } catch (err) {
+      console.warn("Supabase server insert error:", err);
+    }
 
     return NextResponse.json(
       {

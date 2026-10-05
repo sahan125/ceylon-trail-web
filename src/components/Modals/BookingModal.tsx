@@ -16,6 +16,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { VEHICLES } from "@/data/mockData";
+import { supabase } from "@/lib/supabase";
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -71,7 +72,34 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     setIsSubmitting(true);
 
     try {
-      // 1. Post to backend Admin Store API
+      // 1. Insert into Supabase 'bookings' table
+      try {
+        const { data: supabaseData, error: supabaseError } = await supabase
+          .from("bookings")
+          .insert([
+            {
+              full_name: fullName,
+              email: email || "Not provided",
+              phone: whatsappNumber,
+              vehicle: currentCar.name,
+              pickup_date: pickupDate,
+              return_date: returnDate,
+              pickup_location: location,
+              status: "Pending",
+            },
+          ])
+          .select();
+
+        if (supabaseError) {
+          console.warn("Supabase insertion notice:", supabaseError.message);
+        } else {
+          console.log("Successfully inserted into Supabase bookings:", supabaseData);
+        }
+      } catch (sbErr) {
+        console.warn("Supabase insert error:", sbErr);
+      }
+
+      // 2. Post to backend Admin Store API
       const response = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -100,7 +128,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
       setCreatedBookingId(bookingRef);
       setSubmitSuccess(true);
 
-      // 2. Format pre-filled WhatsApp message
+      // 3. Format pre-filled WhatsApp message
       const message = `Hello Ceylon Trail! I'd like to confirm a car rental booking request:%0A%0A` +
         `📋 *Booking Ref:* ${bookingRef}%0A` +
         `🚗 *Vehicle:* ${currentCar.name} (${currentCar.category})%0A` +
