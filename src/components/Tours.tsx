@@ -1,19 +1,79 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Compass, ArrowRight, MapPin } from "lucide-react";
-import { TOUR_PACKAGES, TourPackage } from "@/data/mockData";
+import { Compass, ArrowRight, MapPin, Sparkles, Loader2 } from "lucide-react";
+import { TourPackage, normalizeTourPackage } from "@/types/tour";
+import { supabase } from "@/lib/supabase";
+import { SEED_TOURS } from "@/data/toursData";
 
 interface ToursProps {
   onSelectTour: (tour: TourPackage) => void;
-  onViewAllItineraries: () => void;
+  onViewAllItineraries: (allTours?: TourPackage[]) => void;
 }
 
 export const Tours: React.FC<ToursProps> = ({
   onSelectTour,
   onViewAllItineraries,
 }) => {
+  const [tours, setTours] = useState<TourPackage[]>(SEED_TOURS);
+  const [loading, setLoading] = useState(true);
+
+  const fetchTours = async () => {
+    try {
+      // 1. Direct Supabase query
+      const { data, error } = await supabase
+        .from("tour_packages")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (!error && data && data.length > 0) {
+        setTours(data.map(normalizeTourPackage));
+        setLoading(false);
+        return;
+      }
+    } catch (err) {
+      console.warn("Supabase live tour fetch note:", err);
+    }
+
+    // 2. Fallback via local API
+    try {
+      const res = await fetch("/api/tours");
+      const json = await res.json();
+      if (json.success && json.data && json.data.length > 0) {
+        setTours(json.data.map(normalizeTourPackage));
+      }
+    } catch (err) {
+      console.warn("Local API tours fetch note:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTours();
+
+    // Real-Time subscription for Tour Packages
+    try {
+      const channel = supabase
+        .channel("tour_packages-live-frontend")
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "tour_packages" },
+          () => {
+            fetchTours();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    } catch (err) {
+      console.warn("Tour package realtime setup note:", err);
+    }
+  }, []);
+
   return (
     <section id="tours" className="w-full py-16 bg-[#F4F7FB] border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,25 +94,33 @@ export const Tours: React.FC<ToursProps> = ({
           </div>
 
           <button
-            onClick={onViewAllItineraries}
+            onClick={() => onViewAllItineraries(tours)}
             className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-800 hover:text-orange-600 transition-colors self-start md:self-end group cursor-pointer"
           >
-            <span>View All 12 Itineraries</span>
+            <span>View All {tours.length} Itineraries</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
 
+        {/* Loading state indicator */}
+        {loading && (
+          <div className="flex items-center justify-center py-6 text-xs text-slate-500 font-semibold gap-2">
+            <Loader2 className="w-4 h-4 animate-spin text-orange-500" />
+            <span>Syncing live tour packages from Supabase...</span>
+          </div>
+        )}
+
         {/* Tour Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-          {TOUR_PACKAGES.map((tour) => (
+          {tours.map((tour, idx) => (
             <div
-              key={tour.id}
+              key={tour.id || idx}
               className="bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
             >
               {/* Image & Route Overlay Container */}
-              <div className="relative w-full h-56 overflow-hidden">
+              <div className="relative w-full h-56 overflow-hidden bg-slate-100">
                 <Image
-                  src={tour.image}
+                  src={tour.image || tour.image_url || "/images/sigiriya.jpg"}
                   alt={tour.title}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -67,7 +135,7 @@ export const Tours: React.FC<ToursProps> = ({
                 {/* Route String Banner at bottom of image */}
                 <div className="absolute bottom-3 left-3 right-3 flex items-center gap-1.5 text-white text-[11px] font-medium truncate">
                   <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                  <span className="truncate">{tour.route}</span>
+                  <span className="truncate">{tour.route || tour.route_locations}</span>
                 </div>
               </div>
 
@@ -77,7 +145,7 @@ export const Tours: React.FC<ToursProps> = ({
                   <h3 className="text-lg font-extrabold text-slate-900 tracking-tight mb-2.5">
                     {tour.title}
                   </h3>
-                  <p className="text-xs text-slate-600 leading-relaxed font-normal mb-6">
+                  <p className="text-xs text-slate-600 leading-relaxed font-normal mb-6 line-clamp-3">
                     {tour.description}
                   </p>
                 </div>
@@ -90,15 +158,15 @@ export const Tours: React.FC<ToursProps> = ({
                         ${tour.price}
                       </span>
                     </div>
-                    <span className="text-[10px] text-slate-600 font-bold block -mt-0.5">
-                      {tour.priceLabel}
+                    <span className="text-[10px] text-slate-500 font-bold block -mt-0.5">
+                      {tour.priceLabel || "/ Complete Group"}
                     </span>
                   </div>
 
                   <button
                     onClick={() => onSelectTour(tour)}
                     className={`px-4 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-xs cursor-pointer ${
-                      tour.buttonColor === "orange"
+                      idx === 2 || tour.buttonColor === "orange"
                         ? "bg-[#EA580C] hover:bg-[#C2410C] text-white hover:shadow-md"
                         : "bg-[#08101E] hover:bg-slate-800 text-white hover:shadow-md"
                     }`}

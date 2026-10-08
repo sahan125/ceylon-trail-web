@@ -13,7 +13,9 @@ import { TourModal } from "@/components/Modals/TourModal";
 import { PermitModal } from "@/components/Modals/PermitModal";
 import { InfoModal } from "@/components/Modals/InfoModal";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
-import { Vehicle, TourPackage, TOUR_PACKAGES } from "@/data/mockData";
+import { Vehicle } from "@/data/mockData";
+import { TourPackage } from "@/types/tour";
+import { SEED_TOURS } from "@/data/toursData";
 
 export default function Home() {
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
@@ -58,8 +60,8 @@ export default function Home() {
     setTourModalOpen(true);
   };
 
-  const handleViewAllTours = () => {
-    setSelectedTour(TOUR_PACKAGES[0]);
+  const handleViewAllTours = (allTours?: TourPackage[]) => {
+    setSelectedTour(allTours && allTours.length > 0 ? allTours[0] : SEED_TOURS[0]);
     setTourModalOpen(true);
   };
 

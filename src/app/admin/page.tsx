@@ -27,12 +27,15 @@ import {
   Check,
   Database,
   Radio,
+  Compass,
 } from "lucide-react";
 import { Booking, BookingStatus, BookingStats } from "@/types/booking";
 import { VEHICLES } from "@/data/mockData";
 import { supabase } from "@/lib/supabase";
+import { TourManagement } from "@/components/Admin/TourManagement";
 
 export default function AdminDashboardPage() {
+  const [activeSection, setActiveSection] = useState<"bookings" | "tours">("bookings");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [stats, setStats] = useState<BookingStats>({
     total: 0,
@@ -400,13 +403,15 @@ export default function AdminDashboardPage() {
               />
             </div>
 
-            <button
-              onClick={() => setIsNewBookingModalOpen(true)}
-              className="flex items-center gap-1.5 bg-[#EA580C] hover:bg-[#C2410C] text-white px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer"
-            >
-              <Plus className="w-4 h-4" />
-              <span className="hidden sm:inline">Add Reservation</span>
-            </button>
+            {activeSection === "bookings" && (
+              <button
+                onClick={() => setIsNewBookingModalOpen(true)}
+                className="flex items-center gap-1.5 bg-[#EA580C] hover:bg-[#C2410C] text-white px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline">Add Reservation</span>
+              </button>
+            )}
 
             <button
               onClick={fetchBookings}
@@ -430,8 +435,65 @@ export default function AdminDashboardPage() {
           </div>
         )}
 
-        {/* 1. Statistics Cards Grid */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Module Switcher Tabs */}
+        <section className="bg-white p-2 rounded-2xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setActiveSection("bookings")}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
+                activeSection === "bookings"
+                  ? "bg-[#08101E] text-white shadow-sm"
+                  : "bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200"
+              }`}
+            >
+              <Car className="w-4 h-4 text-orange-500" />
+              <span>Car Rental Bookings</span>
+              <span
+                className={`text-[10px] px-2 py-0.5 rounded-full font-black ${
+                  activeSection === "bookings"
+                    ? "bg-orange-600 text-white"
+                    : "bg-slate-200 text-slate-700"
+                }`}
+              >
+                {bookings.length}
+              </span>
+            </button>
+
+            <button
+              onClick={() => setActiveSection("tours")}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
+                activeSection === "tours"
+                  ? "bg-[#08101E] text-white shadow-sm"
+                  : "bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200"
+              }`}
+            >
+              <Compass className="w-4 h-4 text-emerald-400" />
+              <span>Tour Packages</span>
+              <span
+                className={`text-[10px] px-2 py-0.5 rounded-full font-black ${
+                  activeSection === "tours"
+                    ? "bg-emerald-600 text-white"
+                    : "bg-slate-200 text-slate-700"
+                }`}
+              >
+                Supabase CMS
+              </span>
+            </button>
+          </div>
+
+          <div className="text-[11px] text-slate-500 font-semibold px-2">
+            {activeSection === "bookings" ? (
+              <span>Managing Customer Vehicle Bookings &amp; Airport Dispatch</span>
+            ) : (
+              <span>Managing Curated Sri Lanka Tour Itineraries</span>
+            )}
+          </div>
+        </section>
+
+        {activeSection === "bookings" ? (
+          <>
+            {/* 1. Statistics Cards Grid */}
+            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Card 1: Total Bookings */}
           <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex items-center justify-between">
             <div>
@@ -774,6 +836,13 @@ export default function AdminDashboardPage() {
             </div>
           )}
         </section>
+          </>
+        ) : (
+          <TourManagement
+            showToast={showToast}
+            supabaseStatus={supabaseStatus}
+          />
+        )}
       </main>
 
       {/* Booking Details Modal */}
