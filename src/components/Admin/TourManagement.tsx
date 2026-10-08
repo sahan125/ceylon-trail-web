@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import {
   Compass,
@@ -21,6 +21,8 @@ import {
   Layers,
   Image as ImageIcon,
   MessageCircle,
+  UploadCloud,
+  Loader2,
 } from "lucide-react";
 import { TourPackage, normalizeTourPackage } from "@/types/tour";
 import { supabase } from "@/lib/supabase";
@@ -51,6 +53,12 @@ export const TourManagement: React.FC<TourManagementProps> = ({
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [editingTour, setEditingTour] = useState<TourPackage | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  // Banner image upload state
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploadSuccessMessage, setUploadSuccessMessage] = useState<string | null>(null);
 
   // Form fields
   const [formTitle, setFormTitle] = useState("");
@@ -121,6 +129,10 @@ export const TourManagement: React.FC<TourManagementProps> = ({
 
   const openAddModal = () => {
     setEditingTour(null);
+    setUploadError(null);
+    setUploadSuccessMessage(null);
+    setIsUploadingImage(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
     setFormTitle("");
     setFormDuration("7 Days / 6 Nights");
     setFormRoute("Negombo, Kandy, Nuwara Eliya, Galle");
@@ -140,6 +152,10 @@ export const TourManagement: React.FC<TourManagementProps> = ({
 
   const openEditModal = (tour: TourPackage) => {
     setEditingTour(tour);
+    setUploadError(null);
+    setUploadSuccessMessage(null);
+    setIsUploadingImage(false);
+    if (fileInputRef.current) fileInputRef.current.value = "";
     setFormTitle(tour.title);
     setFormDuration(tour.duration);
     setFormRoute(
@@ -157,6 +173,75 @@ export const TourManagement: React.FC<TourManagementProps> = ({
       Array.isArray(tour.inclusions) ? tour.inclusions.join("\n") : ""
     );
     setIsFormModalOpen(true);
+  };
+
+  const handleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadError(null);
+    setUploadSuccessMessage(null);
+
+    // 1. Validate that it is an image
+    if (!file.type.startsWith("image/")) {
+      setUploadError("Please select a valid image file (JPEG, PNG, WebP, etc.).");
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+
+    // 2. Validate that it is 5MB or smaller
+    const MAX_SIZE_BYTES = 5 * 1024 * 1024;
+    if (file.size > MAX_SIZE_BYTES) {
+      setUploadError(
+        `File is too large (${(file.size / (1024 * 1024)).toFixed(2)} MB). Image must be 5MB or smaller.`
+      );
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+
+    setIsUploadingImage(true);
+
+    try {
+      // 3. Unique file name with spaces replaced by dashes
+      const sanitizedOriginalName = file.name.replace(/\s+/g, "-");
+      const fileName = `${Date.now()}-${sanitizedOriginalName}`;
+
+      // 4. Upload to public Supabase Storage bucket 'tour-images'
+      const { error: sbUploadError } = await supabase.storage
+        .from("tour-images")
+        .upload(fileName, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (sbUploadError) {
+        throw new Error(sbUploadError.message);
+      }
+
+      // 5. Retrieve public URL
+      const { data: urlData } = supabase.storage
+        .from("tour-images")
+        .getPublicUrl(fileName);
+
+      if (!urlData?.publicUrl) {
+        throw new Error("Unable to retrieve public URL for uploaded image.");
+      }
+
+      setFormImageUrl(urlData.publicUrl);
+      setUploadSuccessMessage(`Uploaded: ${file.name}`);
+      showToast("Banner image uploaded to Supabase Storage!");
+    } catch (err: any) {
+      console.error("Supabase Storage image upload error:", err);
+      const msg =
+        err?.message ||
+        "Upload failed. Please ensure the 'tour-images' bucket exists in your Supabase project with public read permissions.";
+      setUploadError(msg);
+    } finally {
+      setIsUploadingImage(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
   };
 
   const handleSaveTour = async (e: React.FormEvent) => {
@@ -669,6 +754,91 @@ export const TourManagement: React.FC<TourManagementProps> = ({
                 </div>
               </div>
 
+              {/* Upload Image Option & Thumbnail Preview */}
+              <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-3.5 space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                  <div>
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-slate-700 block">
+                      Or Upload Banner Image
+                    </span>
+                    <span className="text-[11px] text-slate-500">
+                      Upload directly to Supabase Storage (<code className="text-slate-700 font-mono text-[10px] bg-slate-200/70 px-1 py-0.5 rounded">tour-images</code> bucket, max 5MB)
+                    </span>
+                  </div>
+
+                  <div>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleImageFileChange}
+                      accept="image/*"
+                      disabled={isUploadingImage}
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      disabled={isUploadingImage}
+                      onClick={() => fileInputRef.current?.click()}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 shadow-xs transition-all cursor-pointer disabled:opacity-50 active:scale-95"
+                    >
+                      {isUploadingImage ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin text-orange-600" />
+                          <span>Uploading Image...</span>
+                        </>
+                      ) : (
+                        <>
+                          <UploadCloud className="w-3.5 h-3.5 text-orange-600" />
+                          <span>Upload Image</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Upload Error Banner */}
+                {uploadError && (
+                  <div className="flex items-start gap-2 p-2.5 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl text-xs">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-rose-500 mt-0.5" />
+                    <div className="flex-1">
+                      <span className="font-bold block">Upload Error</span>
+                      <span className="text-[11px] leading-relaxed">{uploadError}</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Upload Success Banner */}
+                {uploadSuccessMessage && (
+                  <div className="flex items-center gap-2 p-2.5 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl text-xs">
+                    <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+                    <span className="font-semibold">{uploadSuccessMessage}</span>
+                  </div>
+                )}
+
+                {/* Thumbnail Preview */}
+                {formImageUrl && (
+                  <div className="pt-2 border-t border-slate-200 flex items-center gap-3">
+                    <div className="relative w-20 h-14 rounded-lg overflow-hidden bg-slate-200 shrink-0 border border-slate-300 shadow-xs">
+                      <Image
+                        src={formImageUrl}
+                        alt="Current Banner Preview"
+                        fill
+                        className="object-cover"
+                        unoptimized={formImageUrl.startsWith("http")}
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                        Current Image Preview
+                      </span>
+                      <p className="text-[11px] text-slate-600 font-mono truncate" title={formImageUrl}>
+                        {formImageUrl}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* Route Locations */}
               <div>
                 <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
@@ -731,10 +901,12 @@ export const TourManagement: React.FC<TourManagementProps> = ({
               <div className="pt-3 border-t border-slate-100 flex gap-3">
                 <button
                   type="submit"
-                  disabled={submitting}
+                  disabled={submitting || isUploadingImage}
                   className="flex-1 bg-[#EA580C] hover:bg-[#C2410C] text-white py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-md cursor-pointer disabled:opacity-50"
                 >
-                  {submitting
+                  {isUploadingImage
+                    ? "Uploading Image..."
+                    : submitting
                     ? "Saving to Supabase..."
                     : editingTour
                     ? "Update Tour in Supabase"
