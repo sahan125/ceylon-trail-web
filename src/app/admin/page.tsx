@@ -28,6 +28,7 @@ import {
   Database,
   Radio,
   Compass,
+  LogOut,
 } from "lucide-react";
 import { Booking, BookingStatus, BookingStats } from "@/types/booking";
 import { VEHICLES } from "@/data/mockData";
@@ -69,6 +70,15 @@ export default function AdminDashboardPage() {
     setTimeout(() => {
       setToastMessage(null);
     }, 4000);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/admin/logout", { method: "POST" });
+    } catch (err) {
+      console.error("Logout request error:", err);
+    }
+    window.location.href = "/admin/login";
   };
 
   const calculateStats = (items: Booking[]) => {
@@ -420,6 +430,16 @@ export default function AdminDashboardPage() {
               title="Refresh Bookings from Supabase"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+            </button>
+
+            {/* Logout Action */}
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-rose-950/60 text-slate-300 hover:text-rose-300 transition-colors border border-slate-700 hover:border-rose-800/80 text-xs font-semibold cursor-pointer"
+              title="Logout from Admin Portal"
+            >
+              <LogOut className="w-3.5 h-3.5 text-rose-400" />
+              <span className="hidden sm:inline">Logout</span>
             </button>
           </div>
         </div>
