@@ -202,6 +202,9 @@ export function getWaypointsForTour(tour?: TourPackage | null): Waypoint[] {
   ];
 }
 
+const CARTO_API_KEY =
+  process.env.NEXT_PUBLIC_CARTO_API_KEY || "cb1_4sl4_1_186d138aad7484b40b6d85de";
+
 interface TourRouteMapProps {
   tour: TourPackage | null;
   className?: string;
@@ -210,10 +213,36 @@ interface TourRouteMapProps {
 export const TourRouteMap: React.FC<TourRouteMapProps> = ({ tour, className = "" }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
+  const tileLayerRef = useRef<any>(null);
+  const [mapStyle, setMapStyle] = useState<"dark" | "voyager">("dark");
   const [activeWaypoint, setActiveWaypoint] = useState<number | null>(null);
   const [isMapReady, setIsMapReady] = useState(false);
 
   const waypoints = getWaypointsForTour(tour);
+
+  // Switch basemap layer dynamically when style changes
+  useEffect(() => {
+    if (!mapInstanceRef.current) return;
+    import("leaflet").then((L) => {
+      if (tileLayerRef.current) {
+        mapInstanceRef.current.removeLayer(tileLayerRef.current);
+      }
+      const newTileUrl =
+        mapStyle === "voyager"
+          ? `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=${CARTO_API_KEY}`
+          : `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=${CARTO_API_KEY}`;
+
+      const newTileLayer = L.tileLayer(newTileUrl, {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
+        subdomains: "abcd",
+        maxZoom: 19,
+        minZoom: 6,
+      }).addTo(mapInstanceRef.current);
+
+      tileLayerRef.current = newTileLayer;
+    });
+  }, [mapStyle]);
 
   useEffect(() => {
     let isMounted = true;
@@ -243,14 +272,21 @@ export const TourRouteMap: React.FC<TourRouteMapProps> = ({ tour, className = ""
 
       mapInstanceRef.current = map;
 
-      // 2. CartoDB Dark Matter Tile Layer
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+      // 2. CartoDB Basemap Tile Layer (Authenticated with API Key)
+      const initialTileUrl =
+        mapStyle === "voyager"
+          ? `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=${CARTO_API_KEY}`
+          : `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=${CARTO_API_KEY}`;
+
+      const initialTileLayer = L.tileLayer(initialTileUrl, {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
         subdomains: "abcd",
         maxZoom: 19,
         minZoom: 6,
       }).addTo(map);
+
+      tileLayerRef.current = initialTileLayer;
 
       // 3. Bright Glowing Light Route Polyline (Bright Cyan '#38bdf8')
       const latLngs: [number, number][] = waypoints.map((w) => [w.lat, w.lng]);
@@ -431,14 +467,43 @@ export const TourRouteMap: React.FC<TourRouteMapProps> = ({ tour, className = ""
           </span>
         </div>
 
-        <button
-          type="button"
-          onClick={handleResetView}
-          className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-700 hover:text-sky-600 bg-slate-100 hover:bg-slate-200/80 px-2.5 py-1 rounded-md transition-colors cursor-pointer border border-slate-200"
-        >
-          <Compass className="w-3 h-3 text-sky-500" />
-          <span>Sri Lanka Island View</span>
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Map Style Switcher (Dark Matter / Voyager) */}
+          <div className="inline-flex items-center p-0.5 rounded-lg bg-slate-100 border border-slate-200 text-[11px] font-bold">
+            <button
+              type="button"
+              onClick={() => setMapStyle("dark")}
+              className={`px-2 py-0.5 rounded-md transition-all cursor-pointer ${
+                mapStyle === "dark"
+                  ? "bg-[#08101E] text-white shadow-2xs"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Dark Matter
+            </button>
+            <button
+              type="button"
+              onClick={() => setMapStyle("voyager")}
+              className={`px-2 py-0.5 rounded-md transition-all cursor-pointer ${
+                mapStyle === "voyager"
+                  ? "bg-white text-slate-900 shadow-2xs border border-slate-200"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              Voyager
+            </button>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleResetView}
+            className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-700 hover:text-sky-600 bg-slate-100 hover:bg-slate-200/80 px-2.5 py-1 rounded-md transition-colors cursor-pointer border border-slate-200"
+          >
+            <Compass className="w-3 h-3 text-sky-500" />
+            <span className="hidden sm:inline">Sri Lanka Island View</span>
+            <span className="sm:hidden">Reset</span>
+          </button>
+        </div>
       </div>
 
       {/* Responsive Map Container with Dark Backdrop */}
