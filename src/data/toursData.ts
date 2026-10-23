@@ -5,8 +5,8 @@ export const SEED_TOURS: TourPackage[] = [
     id: "tour-ceylon-01",
     title: "Classic Ceylon Explorer",
     duration: "7 Days / 6 Nights",
-    route_locations: "Negombo, Kandy, Nuwara Eliya, Galle",
-    route: "Negombo • Kandy • Nuwara Eliya • Galle",
+    route_locations: "Colombo Bandaranaike International Airport, Negombo, Sigiriya, Kandy, Nuwara Eliya, Galle, Colombo Bandaranaike International Airport",
+    route: "Colombo Airport • Negombo • Sigiriya • Kandy • Nuwara Eliya • Galle • Colombo Airport",
     description:
       "The quintessential first-timer circuit. UNESCO cultural triangle, sacred Kandy relics, misty high-elevation tea plantations, down to southern colonial fortress.",
     price: 490,
@@ -36,8 +36,8 @@ export const SEED_TOURS: TourPackage[] = [
     id: "tour-ceylon-02",
     title: "Hill Country & Tea Trails",
     duration: "4 Days / 3 Nights",
-    route_locations: "Kandy, Ella, Horton Plains, Little Adam's Peak",
-    route: "Kandy • Ella • Horton Plains • Little Adam's Peak",
+    route_locations: "Colombo Bandaranaike International Airport, Kandy, Horton Plains, Ella, Little Adam's Peak, Colombo Bandaranaike International Airport",
+    route: "Colombo Airport • Kandy • Horton Plains • Ella • Little Adam's Peak • Colombo Airport",
     description:
       "Traverse panoramic waterfalls, cool temperate mountain towns, historic British colonial bungalows, and scenic hikes through rolling Ceylon tea valleys.",
     price: 280,
@@ -66,8 +66,8 @@ export const SEED_TOURS: TourPackage[] = [
     id: "tour-ceylon-03",
     title: "Grand Island Grand Loop",
     duration: "10 Days / 9 Nights",
-    route_locations: "Anuradhapura, Trincomalee, Ella, Yala, Galle",
-    route: "Anuradhapura • Trincomalee • Ella • Yala • Galle",
+    route_locations: "Colombo Bandaranaike International Airport, Anuradhapura, Trincomalee, Ella, Yala, Galle, Colombo Bandaranaike International Airport",
+    route: "Colombo Airport • Anuradhapura • Trincomalee • Ella • Yala • Galle • Colombo Airport",
     description:
       "The definitive comprehensive expedition. From northern ancient kingdoms to Eastern secluded surf beaches, wild leopard safaris in Yala, and coastal drives back to BIA Airport.",
     price: 720,

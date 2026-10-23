@@ -32,16 +32,83 @@ const SRI_LANKA_COORDINATES: Record<string, { lat: number; lng: number; descript
   dambulla: { lat: 7.8731, lng: 80.6517, description: "Golden Royal Rock Cave Temple" },
   polonnaruwa: { lat: 7.9403, lng: 81.0188, description: "Medieval Royal Capital & Gal Vihara" },
   bentota: { lat: 6.4256, lng: 79.9982, description: "Golden Beach & Watersports Lagoon" },
-  katunayake: { lat: 7.1693, lng: 79.8886, description: "Bandaranaike International Airport (BIA)" },
+  katunayake: { lat: 7.1808, lng: 79.8841, description: "Colombo Bandaranaike International Airport (CMB / BIA)" },
+  airport: { lat: 7.1808, lng: 79.8841, description: "Colombo Bandaranaike International Airport (CMB / BIA)" },
+  "colombo airport": { lat: 7.1808, lng: 79.8841, description: "Colombo Bandaranaike International Airport (CMB / BIA)" },
+  "bandaranaike international airport": { lat: 7.1808, lng: 79.8841, description: "Colombo Bandaranaike International Airport (CMB / BIA)" },
+  "colombo bandaranaike international airport": { lat: 7.1808, lng: 79.8841, description: "Colombo Bandaranaike International Airport (CMB / BIA)" },
 };
+
+export const AIRPORT_START_WAYPOINT: Waypoint = {
+  name: "Colombo Bandaranaike International Airport",
+  lat: 7.1808,
+  lng: 79.8841,
+  description: "Airport Meet & Greet, Vehicle Delivery & Tour Start",
+};
+
+export const AIRPORT_END_WAYPOINT: Waypoint = {
+  name: "Colombo Bandaranaike International Airport",
+  lat: 7.1775,
+  lng: 79.8885,
+  description: "Airport Terminal Handover & Flight Departure Gate",
+};
+
+function ensureAirportRoundTrip(stops: Waypoint[]): Waypoint[] {
+  if (!stops || stops.length === 0) {
+    return [AIRPORT_START_WAYPOINT, AIRPORT_END_WAYPOINT];
+  }
+
+  const result = [...stops];
+
+  // 1. Ensure Start is Colombo Bandaranaike International Airport
+  const first = result[0];
+  const isFirstAirport =
+    first.name.toLowerCase().includes("airport") ||
+    first.name.toLowerCase().includes("bandaranaike") ||
+    first.name.toLowerCase().includes("katunayake") ||
+    (Math.abs(first.lat - 7.1808) < 0.05 && Math.abs(first.lng - 79.8841) < 0.05);
+
+  if (!isFirstAirport) {
+    result.unshift(AIRPORT_START_WAYPOINT);
+  } else {
+    result[0] = {
+      ...result[0],
+      name: "Colombo Bandaranaike International Airport",
+      description: result[0].description || AIRPORT_START_WAYPOINT.description,
+    };
+  }
+
+  // 2. Ensure End is Colombo Bandaranaike International Airport
+  const last = result[result.length - 1];
+  const isLastAirport =
+    result.length > 1 &&
+    (last.name.toLowerCase().includes("airport") ||
+      last.name.toLowerCase().includes("bandaranaike") ||
+      last.name.toLowerCase().includes("katunayake") ||
+      (Math.abs(last.lat - 7.1775) < 0.05 && Math.abs(last.lng - 79.8885) < 0.05));
+
+  if (!isLastAirport) {
+    result.push(AIRPORT_END_WAYPOINT);
+  } else if (result.length > 1) {
+    result[result.length - 1] = {
+      ...result[result.length - 1],
+      name: "Colombo Bandaranaike International Airport",
+      description: result[result.length - 1].description || AIRPORT_END_WAYPOINT.description,
+    };
+  }
+
+  return result;
+}
 
 export function getWaypointsForTour(tour?: TourPackage | null): Waypoint[] {
   if (!tour) {
     return [
+      AIRPORT_START_WAYPOINT,
       { name: "Kandy", lat: 7.2906, lng: 80.6337, description: "Temple of the Sacred Tooth Relic" },
       { name: "Horton Plains National Park", lat: 6.8016, lng: 80.8034, description: "World's End & Baker's Falls" },
       { name: "Ella", lat: 6.8667, lng: 81.0466, description: "Nine Arch Bridge & Ella Gap" },
       { name: "Little Adam's Peak", lat: 6.8737, lng: 81.0558, description: "Scenic Mountain Hiking Trek" },
+      AIRPORT_END_WAYPOINT,
     ];
   }
 
@@ -55,10 +122,12 @@ export function getWaypointsForTour(tour?: TourPackage | null): Waypoint[] {
     idLower.includes("tour-ceylon-02")
   ) {
     return [
+      AIRPORT_START_WAYPOINT,
       { name: "Kandy", lat: 7.2906, lng: 80.6337, description: "Cultural Capital & Temple of the Tooth" },
       { name: "Horton Plains National Park", lat: 6.8016, lng: 80.8034, description: "Cloud Forest Plateau & World's End" },
       { name: "Ella", lat: 6.8667, lng: 81.0466, description: "Demodara Nine Arch Bridge & Waterfalls" },
       { name: "Little Adam's Peak", lat: 6.8737, lng: 81.0558, description: "Panoramic Hiking Summit over Tea Valleys" },
+      AIRPORT_END_WAYPOINT,
     ];
   }
 
@@ -69,11 +138,13 @@ export function getWaypointsForTour(tour?: TourPackage | null): Waypoint[] {
     idLower.includes("tour-ceylon-01")
   ) {
     return [
-      { name: "Negombo", lat: 7.2083, lng: 79.8358, description: "Coastal Canal Town & BIA Airport Gate" },
+      AIRPORT_START_WAYPOINT,
+      { name: "Negombo", lat: 7.2083, lng: 79.8358, description: "Coastal Canal Town & Lagoon" },
       { name: "Sigiriya", lat: 7.957, lng: 80.7603, description: "Ancient Rock Fortress Citadel" },
       { name: "Kandy", lat: 7.2906, lng: 80.6337, description: "Sacred Tooth Relic & Peradeniya Gardens" },
       { name: "Nuwara Eliya", lat: 6.9497, lng: 80.7891, description: "Highland Tea Country & Misty Peaks" },
       { name: "Galle", lat: 6.0535, lng: 80.221, description: "Colonial Dutch Fortress & Ramparts" },
+      AIRPORT_END_WAYPOINT,
     ];
   }
 
@@ -84,11 +155,13 @@ export function getWaypointsForTour(tour?: TourPackage | null): Waypoint[] {
     idLower.includes("tour-ceylon-03")
   ) {
     return [
+      AIRPORT_START_WAYPOINT,
       { name: "Anuradhapura", lat: 8.3114, lng: 80.4037, description: "Ancient Sacred City & Monasteries" },
       { name: "Trincomalee", lat: 8.5874, lng: 81.2152, description: "Nilaveli Beach & Pigeon Island" },
       { name: "Ella", lat: 6.8667, lng: 81.0466, description: "Scenic Mountain Valleys & Ravana Falls" },
       { name: "Yala National Park", lat: 6.3686, lng: 81.5204, description: "4x4 Leopard Safari Expedition" },
       { name: "Galle", lat: 6.0535, lng: 80.221, description: "Southern Ocean Fortress Sunset" },
+      AIRPORT_END_WAYPOINT,
     ];
   }
 
@@ -115,15 +188,17 @@ export function getWaypointsForTour(tour?: TourPackage | null): Waypoint[] {
   }
 
   if (matchedWaypoints.length >= 2) {
-    return matchedWaypoints;
+    return ensureAirportRoundTrip(matchedWaypoints);
   }
 
   // Default fallback if unknown custom tour
   return [
+    AIRPORT_START_WAYPOINT,
     { name: "Kandy", lat: 7.2906, lng: 80.6337, description: "Sacred City & Cultural Heart" },
     { name: "Horton Plains National Park", lat: 6.8016, lng: 80.8034, description: "World's End Plateau" },
     { name: "Ella", lat: 6.8667, lng: 81.0466, description: "Demodara Railway & Scenic Gap" },
     { name: "Little Adam's Peak", lat: 6.8737, lng: 81.0558, description: "Hiking Summit" },
+    AIRPORT_END_WAYPOINT,
   ];
 }
 
@@ -416,7 +491,13 @@ export const TourRouteMap: React.FC<TourRouteMapProps> = ({ tour, className = ""
             >
               {idx + 1}
             </span>
-            <span>{wp.name}</span>
+            <span>
+              {idx === 0
+                ? "Colombo Airport (Start)"
+                : idx === waypoints.length - 1
+                ? "Colombo Airport (Return)"
+                : wp.name}
+            </span>
           </button>
         ))}
       </div>

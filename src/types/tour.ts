@@ -35,6 +35,20 @@ export function normalizeTourPackage(item: any): TourPackage {
     routeString = item.route;
   }
 
+  // Ensure routeString begins and ends with Colombo Airport
+  if (routeString) {
+    const parts = routeString.split("•").map((s: string) => s.trim()).filter(Boolean);
+    const startsWithAirport = parts.length > 0 && (parts[0].toLowerCase().includes("airport") || parts[0].toLowerCase().includes("colombo"));
+    const endsWithAirport = parts.length > 1 && (parts[parts.length - 1].toLowerCase().includes("airport") || parts[parts.length - 1].toLowerCase().includes("colombo"));
+    if (!startsWithAirport) {
+      parts.unshift("Colombo Airport");
+    }
+    if (!endsWithAirport) {
+      parts.push("Colombo Airport");
+    }
+    routeString = parts.join(" • ");
+  }
+
   // Format highlights array
   let highlightsArray: string[] = [];
   if (Array.isArray(item.highlights)) {
