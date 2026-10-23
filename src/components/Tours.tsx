@@ -176,19 +176,31 @@ export const Tours: React.FC<ToursProps> = ({
 
           {/* Custom Tour Package Card - No Price Displayed */}
           <div className="bg-linear-to-br from-slate-900 via-slate-850 to-[#08101E] rounded-2xl overflow-hidden border border-slate-700 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col justify-between text-white group">
-            {/* Header Visual */}
-            <div className="relative w-full h-56 overflow-hidden bg-slate-800 flex items-center justify-center p-6 text-center">
-              <div className="absolute inset-0 bg-radial from-amber-500/15 via-transparent to-transparent" />
-              <div className="relative z-10 flex flex-col items-center">
-                <div className="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center mb-3 shadow-inner group-hover:scale-110 transition-transform">
-                  <Sparkles className="w-7 h-7" />
-                </div>
-                <span className="text-[11px] font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
-                  Tailor-Made Itinerary
-                </span>
-                <span className="text-xs text-slate-300 font-medium mt-2">
-                  Flexible Route &amp; Dedicated Driver
-                </span>
+            {/* Header Visual with Custom Tour Image */}
+            <div className="relative w-full h-56 overflow-hidden bg-slate-800">
+              <Image
+                src="/images/custom-tour.jpg"
+                alt="Create Your Own Custom Sri Lanka Tour Package"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/30 to-black/30" />
+
+              {/* Tailor-Made Badge */}
+              <div className="absolute top-3.5 left-3.5 bg-amber-500/90 backdrop-blur-md text-slate-950 text-[11px] font-black uppercase tracking-wider px-3 py-1 rounded-full border border-amber-400/40 shadow-xs flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-slate-950" />
+                <span>Tailor-Made</span>
+              </div>
+
+              {/* Custom Duration Badge */}
+              <div className="absolute top-3.5 right-3.5 bg-black/60 backdrop-blur-md text-white text-[10.5px] font-bold px-2.5 py-1 rounded-full border border-white/20 shadow-xs">
+                Custom Duration
+              </div>
+
+              {/* Bottom Route Note */}
+              <div className="absolute bottom-3 left-3 right-3 flex items-center gap-1.5 text-amber-300 text-[11px] font-semibold truncate">
+                <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <span className="truncate">Your Custom Route • Any Destination in Sri Lanka</span>
               </div>
             </div>
 
