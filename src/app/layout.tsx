@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { MobileSplash } from "@/components/MobileSplash";
 
 export const metadata: Metadata = {
   title: "Lankatrails.lk | Sri Lanka Tourist Rentals & Chauffeur Services",
@@ -30,6 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="antialiased font-sans overflow-x-hidden">
       <body className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-orange-500 selection:text-white overflow-x-hidden">
+        <MobileSplash />
         {children}
       </body>
     </html>
