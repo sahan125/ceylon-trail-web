@@ -74,7 +74,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuoteModal }) => {
           <Link href="#hero" className="flex items-center gap-3 group">
             <Image
               src="/images/logo.png"
-              alt="Lanka Trail"
+              alt="Lankatrails"
               width={160}
               height={106}
               priority
@@ -83,7 +83,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuoteModal }) => {
             <div className="flex flex-col">
               <div className="flex items-center gap-1">
                 <span className="font-black text-xl tracking-tight text-slate-950 font-sans group-hover:text-orange-600 transition-colors">
-                  lankatrails.lk
+                  Lankatrails.lk
                 </span>
               </div>
               <span className="text-[9.5px] uppercase tracking-wider font-bold text-slate-500">

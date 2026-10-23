@@ -44,7 +44,7 @@ export const TourModal: React.FC<TourModalProps> = ({ isOpen, onClose, tour }) =
         ];
 
   const handleBookTour = () => {
-    const msg = `Hello lankatrails.lk! I am interested in booking the tour package:%0A` +
+    const msg = `Hello Lankatrails.lk! I am interested in booking the tour package:%0A` +
       `🧭 *Tour:* ${tour.title}%0A` +
       `⏱️ *Duration:* ${tour.duration}%0A` +
       `📍 *Route:* ${routeDisplay}%0A` +

@@ -222,7 +222,7 @@ export const Tours: React.FC<ToursProps> = ({
                 </span>
                 <a
                   href={`https://wa.me/94714877742?text=${encodeURIComponent(
-                    "Hello lankatrails.lk! I would like to create my own custom tour package in Sri Lanka. Here are my preferred destinations, dates, and group size:"
+                    "Hello Lankatrails.lk! I would like to create my own custom tour package in Sri Lanka. Here are my preferred destinations, dates, and group size:"
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"

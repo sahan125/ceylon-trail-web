@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Admin Portal | lankatrails.lk Tourist Car Rentals",
+  title: "Admin Portal | Lankatrails.lk Tourist Car Rentals",
   description:
     "Real-time management dashboard for incoming vehicle rental bookings, customer inquiries, and fleet operations.",
 };

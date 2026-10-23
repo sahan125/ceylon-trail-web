@@ -33,14 +33,14 @@ export const Footer: React.FC<FooterProps> = ({
               <div className="bg-white/95 p-1 rounded-xl shadow-xs inline-flex items-center justify-center">
                 <Image
                   src="/images/logo.png"
-                  alt="Lanka Trail"
+                  alt="Lankatrails"
                   width={60}
                   height={40}
                   className="h-9 w-auto object-contain"
                 />
               </div>
               <span className="text-lg font-black tracking-tight text-white">
-                lankatrails.lk
+                Lankatrails.lk
               </span>
             </div>
 
@@ -191,7 +191,7 @@ export const Footer: React.FC<FooterProps> = ({
         {/* Bottom Bar */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-300">
           <div>
-            © 2026 lankatrails.lk. All rights reserved.
+            © 2026 Lankatrails.lk. All rights reserved.
           </div>
 
           <div className="flex items-center gap-5">

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "lankatrails.lk | Sri Lanka Tourist Rentals & Chauffeur Services",
+  title: "Lankatrails.lk | Sri Lanka Tourist Rentals & Chauffeur Services",
   description:
     "Pristine tourist fleet. Vehicles delivered directly inside Katunayake Airport arrivals gate, English-fluent tourist chauffeurs, and driving permits handled before your flight lands.",
   keywords: [
@@ -12,7 +12,8 @@ export const metadata: Metadata = {
     "Colombo car rental",
     "Sri Lanka driving permit AAC",
     "Tourist car hire Sri Lanka",
-    "lankatrails.lk",
+    "Lankatrails.lk",
+    "Lankatrails",
   ],
   icons: {
     icon: "/images/logo.png",

@@ -375,7 +375,7 @@ export default function AdminDashboardPage() {
               <div className="p-1 rounded-xl bg-white/95 flex items-center justify-center shadow-xs">
                 <Image
                   src="/images/logo.png"
-                  alt="Lanka Trail"
+                  alt="Lankatrails"
                   width={60}
                   height={40}
                   className="h-8 w-auto object-contain"
@@ -384,7 +384,7 @@ export default function AdminDashboardPage() {
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="font-black text-base tracking-tight text-white leading-tight">
-                    lankatrails.lk
+                    Lankatrails.lk
                   </h1>
                   <span className="text-[10px] font-black uppercase tracking-wider bg-orange-500/20 text-orange-400 px-2 py-0.5 rounded-sm border border-orange-500/30">
                     Admin Portal
@@ -828,7 +828,7 @@ export default function AdminDashboardPage() {
                           {/* Direct WhatsApp Reply */}
                           <a
                             href={`https://wa.me/${b.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                              `Hello ${b.clientName}! This is lankatrails.lk Car Rentals regarding your booking #${b.id} for the ${b.vehicleName} (${b.pickupDate} to ${b.returnDate}).`
+                              `Hello ${b.clientName}! This is Lankatrails.lk Car Rentals regarding your booking #${b.id} for the ${b.vehicleName} (${b.pickupDate} to ${b.returnDate}).`
                             )}`}
                             target="_blank"
                             rel="noopener noreferrer"

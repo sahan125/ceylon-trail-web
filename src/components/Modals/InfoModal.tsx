@@ -98,7 +98,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, type }) =
       ),
     },
     terms: {
-      title: "Terms & Conditions and Privacy Policy - lankatrails.lk",
+      title: "Terms & Conditions and Privacy Policy - Lankatrails.lk",
       icon: <FileText className="w-6 h-6 text-orange-600" />,
       bg: "bg-orange-50",
       content: (
@@ -106,7 +106,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, type }) =
           {/* Section: Introduction */}
           <div className="bg-amber-50/70 border border-amber-200/80 rounded-xl p-3.5 text-amber-950 font-medium">
             <h4 className="font-bold text-sm mb-1 text-amber-900">
-              Terms and Conditions - lankatrails.lk
+              Terms and Conditions - Lankatrails.lk
             </h4>
             <p>
               Terms and Conditions you have to read carefully and understand and accept before making any reservations. &quot;I have not read the terms and conditions properly&quot;, &quot;I have not understood the terms and conditions properly&quot; will not be an excuse to escape from a responsibility, so kindly go through these carefully and place the booking only if you are willing to stick into them.
@@ -235,7 +235,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, type }) =
               Important Notice of Process of refunds and Refund Policy
             </h5>
             <p>
-              Refunds are made by us; <strong>lankatrails.lk</strong> and we are responsible to provide funds to make refunds, and payment gateway is not responsible to provide funds.
+              Refunds are made by us; <strong>Lankatrails.lk</strong> and we are responsible to provide funds to make refunds, and payment gateway is not responsible to provide funds.
             </p>
             <p>
               Refunding process generally takes 2 bank working days to process a refund.
@@ -248,10 +248,10 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, type }) =
           {/* Section: Privacy Policy */}
           <div className="border border-slate-200 rounded-xl p-3.5 space-y-2 bg-slate-50/50">
             <h5 className="font-bold text-slate-900 text-sm">
-              Privacy Policy - lankatrails.lk
+              Privacy Policy - Lankatrails.lk
             </h5>
             <p>
-              At lankatrails.lk, we are committed to protecting the privacy and security of our customers&apos; personal information. This Privacy Policy outlines how we collect, use, and safeguard your information when you visit or make a purchase on our website.
+              At Lankatrails.lk, we are committed to protecting the privacy and security of our customers&apos; personal information. This Privacy Policy outlines how we collect, use, and safeguard your information when you visit or make a purchase on our website.
             </p>
             <div className="space-y-2 pt-1">
               <span className="font-bold text-slate-900 block">Information We Collect:</span>

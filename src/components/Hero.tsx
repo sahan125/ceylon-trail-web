@@ -119,7 +119,7 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
       const serviceName =
         rentalType === "self" ? "Self-Drive Rental" : "Chauffeur Guided Tour";
       const message =
-        `Hello lankatrails.lk! I would like to book a vehicle:%0A%0A` +
+        `Hello Lankatrails.lk! I would like to book a vehicle:%0A%0A` +
         `📋 *Booking Ref:* ${bookingRef}%0A` +
         `🚗 *Chosen Vehicle:* ${selectedVehicle.name} (${selectedVehicle.category})%0A` +
         `🛠️ *Service:* ${serviceName}%0A` +
@@ -146,7 +146,7 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
       }
     } catch (error) {
       console.error("Booking submission error:", error);
-      const fallbackMsg = `Hello lankatrails.lk! I want to book ${selectedVehicle.name} (${rentalType === "self" ? "Self-Drive" : "Chauffeur"}) from ${pickupDate} (${pickupTime}) to ${returnDate} (${returnTime}) at ${location}. Name: ${clientNameValue}, Phone: ${phoneValue}`;
+      const fallbackMsg = `Hello Lankatrails.lk! I want to book ${selectedVehicle.name} (${rentalType === "self" ? "Self-Drive" : "Chauffeur"}) from ${pickupDate} (${pickupTime}) to ${returnDate} (${returnTime}) at ${location}. Name: ${clientNameValue}, Phone: ${phoneValue}`;
       window.open(
         `https://wa.me/94714877742?text=${encodeURIComponent(fallbackMsg)}`,
         "_blank"

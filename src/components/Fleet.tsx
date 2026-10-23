@@ -45,7 +45,7 @@ export const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
   };
 
   const handleBookPackage = (category: string, days: number, price: number, extraDay: number) => {
-    const msg = `Hello lankatrails.lk! I want to book the ${category} Car Package:%0A` +
+    const msg = `Hello Lankatrails.lk! I want to book the ${category} Car Package:%0A` +
       `⏱️ Duration: ${days} Days (No mileage restrictions)%0A` +
       `💰 Package Price: $${price} USD%0A` +
       `➕ Additional Day Rate: $${extraDay} USD%0A` +

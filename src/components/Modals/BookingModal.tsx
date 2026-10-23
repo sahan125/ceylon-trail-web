@@ -166,7 +166,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
       setSubmitSuccess(true);
 
       // 3. Format pre-filled WhatsApp message
-      const message = `Hello lankatrails.lk! I'd like to confirm a car rental booking request:%0A%0A` +
+      const message = `Hello Lankatrails.lk! I'd like to confirm a car rental booking request:%0A%0A` +
         `📋 *Booking Ref:* ${bookingRef}%0A` +
         `🚗 *Vehicle:* ${currentCar.name} (${currentCar.category})%0A` +
         `🛠️ *Service:* ${rentalType === "self" ? "Self-Drive Rental" : "Chauffeur Guided Tour"}%0A` +
@@ -190,7 +190,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     } catch (error) {
       console.error("Booking submission error:", error);
       // Fallback: still open WhatsApp even if local API had a temporary glitch
-      const fallbackMsg = `Hello lankatrails.lk! I'd like an Instant Quote for ${currentCar.name} ($${total}) for ${daysDiff} days from ${pickupDate} to ${returnDate}. Name: ${fullName}, Phone: ${whatsappNumber}.`;
+      const fallbackMsg = `Hello Lankatrails.lk! I'd like an Instant Quote for ${currentCar.name} ($${total}) for ${daysDiff} days from ${pickupDate} to ${returnDate}. Name: ${fullName}, Phone: ${whatsappNumber}.`;
       window.open(`https://wa.me/94714877742?text=${encodeURIComponent(fallbackMsg)}`, "_blank");
       setSubmitSuccess(true);
     } finally {
@@ -276,7 +276,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               <button
                 type="button"
                 onClick={() => {
-                  const message = `Hello lankatrails.lk! Checking on my booking ref: ${createdBookingId}`;
+                  const message = `Hello Lankatrails.lk! Checking on my booking ref: ${createdBookingId}`;
                   window.open(`https://wa.me/94714877742?text=${encodeURIComponent(message)}`, "_blank");
                 }}
                 className="flex-1 bg-[#25D366] hover:bg-[#20bd5a] text-white py-3 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md cursor-pointer"
