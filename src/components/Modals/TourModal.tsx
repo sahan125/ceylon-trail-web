@@ -138,19 +138,10 @@ export const TourModal: React.FC<TourModalProps> = ({ isOpen, onClose, tour }) =
           </div>
 
           {/* Action & Inquire */}
-          <div className="pt-2 flex items-center justify-between border-t border-slate-100 gap-4">
-            <div>
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
-                Itinerary Pricing
-              </span>
-              <span className="text-sm font-bold text-slate-900">
-                Custom Quote on Request
-              </span>
-            </div>
-
+          <div className="pt-3 border-t border-slate-100 flex items-center justify-end">
             <button
               onClick={handleBookTour}
-              className="bg-[#EA580C] hover:bg-[#C2410C] text-white px-6 py-3 rounded-full font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg hover:shadow-xl transition-all cursor-pointer shrink-0"
+              className="w-full sm:w-auto bg-[#EA580C] hover:bg-[#C2410C] text-white px-8 py-3 rounded-full font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all cursor-pointer"
             >
               <MessageCircle className="w-4 h-4" />
               <span>Inquire via WhatsApp</span>

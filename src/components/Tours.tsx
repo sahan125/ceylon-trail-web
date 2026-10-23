@@ -151,14 +151,10 @@ export const Tours: React.FC<ToursProps> = ({
                 </div>
 
                 {/* Action CTA */}
-                <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                  <span className="text-xs font-semibold text-slate-500">
-                    Custom Quote on Request
-                  </span>
-
+                <div className="pt-4 border-t border-slate-100">
                   <button
                     onClick={() => onSelectTour(tour)}
-                    className={`px-4 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-xs cursor-pointer ${
+                    className={`w-full py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-xs cursor-pointer text-center ${
                       idx === 2 || tour.buttonColor === "orange"
                         ? "bg-[#EA580C] hover:bg-[#C2410C] text-white hover:shadow-md"
                         : "bg-[#08101E] hover:bg-slate-800 text-white hover:shadow-md"
