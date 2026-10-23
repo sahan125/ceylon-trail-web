@@ -18,7 +18,6 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ onOpenQuoteModal }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [currentLang, setCurrentLang] = useState<"EN" | "DE" | "FR">("EN");
 
   const navLinks = [
     { name: "Home", href: "#hero" },
@@ -48,26 +47,21 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuoteModal }) => {
           <div className="hidden lg:flex items-center gap-2 text-slate-300">
             <FileCheck2 className="w-3.5 h-3.5 text-emerald-400" />
             <span>
-              Free issuing of Sri Lanka Driving Permits & IAC/IDP Handed on Arrival
+              Handle all the documentation works and handover the driving permit to you.
             </span>
           </div>
 
           {/* Right item */}
           <div className="flex items-center gap-3 text-xs ml-auto sm:ml-0">
             <a
-              href="https://wa.me/94718905282"
+              href="https://wa.me/94714877742"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 hover:text-emerald-400 transition-colors text-emerald-300 font-medium"
             >
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Hotline & WhatsApp: +94 71 890 5282</span>
+              <span>Hotline & WhatsApp: +9471 487 7742</span>
             </a>
-            <span className="text-slate-600 hidden sm:inline">|</span>
-            <div className="hidden sm:flex items-center gap-1 text-amber-400 font-semibold text-[11px]">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>SLTDA Certified</span>
-            </div>
           </div>
         </div>
       </div>
@@ -79,16 +73,16 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuoteModal }) => {
           <Link href="#hero" className="flex items-center gap-3 group">
             <div className="w-11 h-11 rounded-lg bg-linear-to-br from-slate-900 to-[#08101E] flex flex-col items-center justify-center text-white shadow-md border border-slate-700/50">
               <span className="text-base font-black tracking-widest text-amber-400 leading-none">
-                CT
+                LT
               </span>
               <span className="text-[7px] text-slate-300 tracking-tighter uppercase font-semibold">
-                LANKA
+                TRAILS
               </span>
             </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-1">
                 <span className="font-black text-xl tracking-tight text-slate-950 font-sans group-hover:text-orange-600 transition-colors">
-                  CEYLON TRAIL
+                  lankatrails.lk
                 </span>
               </div>
               <span className="text-[9.5px] uppercase tracking-wider font-bold text-slate-500">
@@ -118,43 +112,16 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuoteModal }) => {
           <div className="hidden md:flex items-center gap-4">
             {/* WhatsApp Quick Link */}
             <a
-              href="https://wa.me/94718905282"
+              href="https://wa.me/94714877742"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200/60 text-xs font-semibold transition-all shadow-2xs"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200/60 text-xs font-semibold transition-all shadow-2xs"
             >
               <div className="w-5 h-5 rounded-full bg-[#25D366] text-white flex items-center justify-center">
                 <Phone className="w-2.5 h-2.5 fill-current" />
               </div>
-              <span>+94 71 890 5282</span>
+              <span>+9471 487 7742</span>
             </a>
-
-            {/* Language Switcher */}
-            <div className="flex items-center border border-slate-200 rounded-lg p-0.5 text-xs font-semibold text-slate-500 bg-slate-50">
-              {(["EN", "DE", "FR"] as const).map((lang) => (
-                <button
-                  key={lang}
-                  onClick={() => setCurrentLang(lang)}
-                  className={`px-2 py-0.5 rounded text-[11px] transition-colors ${
-                    currentLang === lang
-                      ? "bg-white text-slate-900 shadow-2xs font-bold"
-                      : "hover:text-slate-900"
-                  }`}
-                >
-                  {lang}
-                </button>
-              ))}
-            </div>
-
-            {/* Admin Portal Link */}
-            <Link
-              href="/admin"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-slate-950 hover:bg-slate-50 text-xs font-semibold transition-all"
-              title="Admin Portal"
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-orange-500" />
-              <span>Admin</span>
-            </Link>
 
             {/* Instant Quote CTA */}
             <button
@@ -199,22 +166,14 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuoteModal }) => {
                 {link.name}
               </a>
             ))}
-            <Link
-              href="/admin"
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1 text-orange-600 font-bold hover:underline flex items-center gap-1.5"
-            >
-              <ShieldCheck className="w-4 h-4" />
-              <span>Admin Portal</span>
-            </Link>
           </nav>
           <div className="mt-4 pt-4 border-t border-slate-100 flex flex-col gap-3">
             <a
-              href="https://wa.me/94718905282"
+              href="https://wa.me/94714877742"
               className="flex items-center justify-center gap-2 py-2 rounded-lg bg-emerald-50 text-emerald-700 font-bold text-xs"
             >
               <Phone className="w-3.5 h-3.5" />
-              WhatsApp: +94 71 890 5282
+              WhatsApp: +9471 487 7742
             </a>
             <button
               onClick={() => {

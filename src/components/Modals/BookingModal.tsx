@@ -138,7 +138,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
       setSubmitSuccess(true);
 
       // 3. Format pre-filled WhatsApp message
-      const message = `Hello Ceylon Trail! I'd like to confirm a car rental booking request:%0A%0A` +
+      const message = `Hello lankatrails.lk! I'd like to confirm a car rental booking request:%0A%0A` +
         `📋 *Booking Ref:* ${bookingRef}%0A` +
         `🚗 *Vehicle:* ${currentCar.name} (${currentCar.category})%0A` +
         `🛠️ *Service:* ${rentalType === "self" ? "Self-Drive Rental" : "Chauffeur Guided Tour"}%0A` +
@@ -156,13 +156,13 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
       // 3. Open WhatsApp link in new tab
       setTimeout(() => {
-        window.open(`https://wa.me/94718905282?text=${message}`, "_blank");
+        window.open(`https://wa.me/94714877742?text=${message}`, "_blank");
       }, 500);
     } catch (error) {
       console.error("Booking submission error:", error);
       // Fallback: still open WhatsApp even if local API had a temporary glitch
-      const fallbackMsg = `Hello Ceylon Trail! I'd like an Instant Quote for ${currentCar.name} ($${total}) for ${daysDiff} days from ${pickupDate} to ${returnDate}. Name: ${fullName}, Phone: ${whatsappNumber}.`;
-      window.open(`https://wa.me/94718905282?text=${encodeURIComponent(fallbackMsg)}`, "_blank");
+      const fallbackMsg = `Hello lankatrails.lk! I'd like an Instant Quote for ${currentCar.name} ($${total}) for ${daysDiff} days from ${pickupDate} to ${returnDate}. Name: ${fullName}, Phone: ${whatsappNumber}.`;
+      window.open(`https://wa.me/94714877742?text=${encodeURIComponent(fallbackMsg)}`, "_blank");
       setSubmitSuccess(true);
     } finally {
       setIsSubmitting(false);
@@ -188,7 +188,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               </h3>
             </div>
             <p className="text-xs text-slate-600 font-medium mt-0.5">
-              Official S.L.T.D.A. Tourist Fleet • Syncs with Admin Dashboard &amp; WhatsApp
+              Pristine Tourist Fleet • Syncs with Admin Dashboard &amp; WhatsApp
             </p>
           </div>
           <button
@@ -247,8 +247,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               <button
                 type="button"
                 onClick={() => {
-                  const message = `Hello Ceylon Trail! Checking on my booking ref: ${createdBookingId}`;
-                  window.open(`https://wa.me/94718905282?text=${encodeURIComponent(message)}`, "_blank");
+                  const message = `Hello lankatrails.lk! Checking on my booking ref: ${createdBookingId}`;
+                  window.open(`https://wa.me/94714877742?text=${encodeURIComponent(message)}`, "_blank");
                 }}
                 className="flex-1 bg-[#25D366] hover:bg-[#20bd5a] text-white py-3 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md cursor-pointer"
               >
@@ -522,7 +522,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 ) : (
                   <>
                     <MessageCircle className="w-4 h-4" />
-                    <span>Confirm &amp; Send to WhatsApp (+94 71 890 5282)</span>
+                    <span>Confirm &amp; Send to WhatsApp (+9471 487 7742)</span>
                   </>
                 )}
               </button>

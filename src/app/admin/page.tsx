@@ -371,12 +371,12 @@ export default function AdminDashboardPage() {
 
             <div className="flex items-center gap-2.5">
               <div className="w-9 h-9 rounded-lg bg-orange-600 flex items-center justify-center font-black text-sm text-white shadow-xs">
-                CT
+                LT
               </div>
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="font-black text-base tracking-tight text-white leading-tight">
-                    Ceylon Trail
+                    lankatrails.lk
                   </h1>
                   <span className="text-[10px] font-black uppercase tracking-wider bg-orange-500/20 text-orange-400 px-2 py-0.5 rounded-sm border border-orange-500/30">
                     Admin Portal
@@ -820,7 +820,7 @@ export default function AdminDashboardPage() {
                           {/* Direct WhatsApp Reply */}
                           <a
                             href={`https://wa.me/${b.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                              `Hello ${b.clientName}! This is Ceylon Trail Car Rentals regarding your booking #${b.id} for the ${b.vehicleName} (${b.pickupDate} to ${b.returnDate}).`
+                              `Hello ${b.clientName}! This is lankatrails.lk Car Rentals regarding your booking #${b.id} for the ${b.vehicleName} (${b.pickupDate} to ${b.returnDate}).`
                             )}`}
                             target="_blank"
                             rel="noopener noreferrer"

@@ -3,7 +3,6 @@
 import React from "react";
 import {
   FileBadge,
-  ShieldCheck,
   Wrench,
   KeyRound,
   ArrowRight,
@@ -12,14 +11,12 @@ import {
 
 interface FeaturesProps {
   onOpenPermitModal: () => void;
-  onOpenDepositInfo: () => void;
   onOpenEmergencyInfo: () => void;
   onOpenAirportInfo: () => void;
 }
 
 export const Features: React.FC<FeaturesProps> = ({
   onOpenPermitModal,
-  onOpenDepositInfo,
   onOpenEmergencyInfo,
   onOpenAirportInfo,
 }) => {
@@ -40,13 +37,13 @@ export const Features: React.FC<FeaturesProps> = ({
 
             <p className="mt-3 text-sm sm:text-base text-slate-600 max-w-2xl font-normal leading-relaxed">
               We resolve all traditional challenges tourists face when renting a vehicle in Sri Lanka,
-              from complex foreign permit validation to deceptive roadside deposits.
+              from complex foreign permit validation to airport logistics.
             </p>
           </div>
 
           {/* WhatsApp Support Pill */}
           <a
-            href="https://wa.me/94718905282"
+            href="https://wa.me/94714877742"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 bg-[#10B981] hover:bg-[#059669] text-white px-5 py-3 rounded-full font-bold text-xs shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 shrink-0"
@@ -59,14 +56,14 @@ export const Features: React.FC<FeaturesProps> = ({
                 Need Help? Chat Now
               </span>
               <span className="text-sm font-black leading-tight">
-                +94 71 890 5282
+                +9471 487 7742
               </span>
             </div>
           </a>
         </div>
 
-        {/* 4 Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* 3 Cards Grid - Security deposit card removed */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Card 1: Driving Permit */}
           <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
             <div>
@@ -77,8 +74,8 @@ export const Features: React.FC<FeaturesProps> = ({
                 No Local Driving Permit?
               </h3>
               <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                Sri Lanka requires an official AAC endorsement for legal car use. Email us your
-                license copy in advance: we have your legal permit issued and handed directly to you
+                Sri Lanka requires an official AAC endorsement for legal car use. We handle all the
+                documentation works in advance and handover the verified driving permit directly to you
                 upon landing.
               </p>
             </div>
@@ -93,45 +90,20 @@ export const Features: React.FC<FeaturesProps> = ({
             </div>
           </div>
 
-          {/* Card 2: Security Deposits */}
-          <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
-            <div>
-              <div className="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
-                <ShieldCheck className="w-6 h-6 stroke-[1.8]" />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 tracking-tight mb-2.5">
-                Transparent Security Deposits
-              </h3>
-              <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                Zero hidden fees or delayed bank reversals. We accept cash (zero-auth card) or released
-                within 48 hours on physical currency deposits (EUR/USD/GBP/AUD) returned instantly in
-                cash on handover.
-              </p>
-            </div>
-            <div className="mt-6 pt-4 border-t border-slate-100">
-              <button
-                onClick={onOpenDepositInfo}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-orange-600 transition-colors cursor-pointer group-hover:translate-x-1 duration-200"
-              >
-                <span>0% FX MARKUPS</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Card 3: 24/7 Islandwide Emergency */}
+          {/* Card 2: 24/7 Islandwide Emergency */}
           <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
             <div>
               <div className="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
                 <Wrench className="w-6 h-6 stroke-[1.8]" />
               </div>
               <h3 className="text-lg font-bold text-slate-900 tracking-tight mb-2.5">
-                24/7 Islandwide Emergency
+                24/7 Islandwide Assistance
               </h3>
               <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                Whether navigating hairpin curves in Ella or quiet coastal reaches near Yala National
-                Park, our rapid mechanical recovery network reaches you max 1.5hrs to substitute 2-3
-                hours anywhere in Sri Lanka.
+                Travel with total peace of mind across Sri Lanka. We are always ready to help! If you face
+                any vehicle mechanical issues, road obstacles, or local strikes and public troubles
+                (වර්ජන කරදර), our friendly emergency response team is just a call away with instant
+                on-site assistance and vehicle replacement.
               </p>
             </div>
             <div className="mt-6 pt-4 border-t border-slate-100">
@@ -145,7 +117,7 @@ export const Features: React.FC<FeaturesProps> = ({
             </div>
           </div>
 
-          {/* Card 4: Terminal Gate Handover */}
+          {/* Card 3: Terminal Gate Handover */}
           <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
             <div>
               <div className="w-12 h-12 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">

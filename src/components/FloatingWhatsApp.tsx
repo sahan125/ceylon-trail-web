@@ -7,11 +7,11 @@ export const FloatingWhatsApp: React.FC = () => {
   return (
     <aside aria-label="Support chat" className="fixed bottom-6 right-6 z-40 flex items-center gap-2">
       <a
-        href="https://wa.me/94718905282"
+        href="https://wa.me/94714877742"
         target="_blank"
         rel="noopener noreferrer"
         className="group flex items-center gap-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white pl-4 pr-5 py-3 rounded-full shadow-2xl hover:shadow-emerald-500/30 transition-all transform hover:scale-105"
-        title="Chat with Ceylon Trail on WhatsApp"
+        title="Chat with lankatrails.lk on WhatsApp"
       >
         <div className="relative">
           <MessageCircle className="w-6 h-6 fill-white" />

@@ -6,7 +6,6 @@ import { Hero } from "@/components/Hero";
 import { Features } from "@/components/Features";
 import { Fleet } from "@/components/Fleet";
 import { Tours } from "@/components/Tours";
-import { Testimonials } from "@/components/Testimonials";
 import { Footer } from "@/components/Footer";
 import { BookingModal } from "@/components/Modals/BookingModal";
 import { TourModal } from "@/components/Modals/TourModal";
@@ -28,7 +27,7 @@ export default function Home() {
   const [permitModalOpen, setPermitModalOpen] = useState(false);
   const [infoModalOpen, setInfoModalOpen] = useState(false);
   const [infoModalType, setInfoModalType] = useState<
-    "deposit" | "emergency" | "airport" | "terms" | null
+    "emergency" | "airport" | "terms" | null
   >(null);
 
   const handleOpenQuote = (preset?: { carId?: string }) => {
@@ -65,7 +64,7 @@ export default function Home() {
     setTourModalOpen(true);
   };
 
-  const handleOpenInfo = (type: "deposit" | "emergency" | "airport" | "terms") => {
+  const handleOpenInfo = (type: "emergency" | "airport" | "terms") => {
     setInfoModalType(type);
     setInfoModalOpen(true);
   };
@@ -83,7 +82,6 @@ export default function Home() {
         {/* 2. Peace of Mind / International Travelers Benefits */}
         <Features
           onOpenPermitModal={() => setPermitModalOpen(true)}
-          onOpenDepositInfo={() => handleOpenInfo("deposit")}
           onOpenEmergencyInfo={() => handleOpenInfo("emergency")}
           onOpenAirportInfo={() => handleOpenInfo("airport")}
         />
@@ -96,9 +94,6 @@ export default function Home() {
           onSelectTour={handleSelectTour}
           onViewAllItineraries={handleViewAllTours}
         />
-
-        {/* 5. Customer Reviews & Credentials */}
-        <Testimonials />
       </main>
 
       {/* Site Footer */}

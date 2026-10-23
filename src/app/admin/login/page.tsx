@@ -66,7 +66,7 @@ export default function AdminLoginPage() {
           className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors bg-slate-900/80 hover:bg-slate-800 px-3.5 py-2 rounded-xl border border-slate-800 backdrop-blur-md"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Back to Ceylon Trail</span>
+          <span>Back to lankatrails.lk</span>
         </Link>
       </div>
 
@@ -76,11 +76,11 @@ export default function AdminLoginPage() {
           {/* Header & Logo */}
           <div className="text-center space-y-2">
             <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-orange-600 text-white font-black text-xl shadow-lg shadow-orange-600/30 mb-2">
-              CT
+              LT
             </div>
             <div className="flex items-center justify-center gap-2">
               <h1 className="text-2xl font-black tracking-tight text-white">
-                Ceylon Trail
+                lankatrails.lk
               </h1>
               <span className="text-[10px] font-black uppercase tracking-wider bg-orange-500/20 text-orange-400 px-2 py-0.5 rounded-sm border border-orange-500/30">
                 Staff Only
@@ -203,7 +203,7 @@ export default function AdminLoginPage() {
           {/* Footer note */}
           <div className="pt-3 border-t border-slate-800 text-center">
             <span className="text-[10px] text-slate-500 font-medium">
-              Ceylon Trail Management System • Protected by HTTP-only Session Security
+              lankatrails.lk Management System • Protected by HTTP-only Session Security
             </span>
           </div>
         </div>

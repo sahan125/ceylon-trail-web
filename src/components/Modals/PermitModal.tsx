@@ -12,8 +12,8 @@ export const PermitModal: React.FC<PermitModalProps> = ({ isOpen, onClose }) => 
   if (!isOpen) return null;
 
   const handlePermitWhatsApp = () => {
-    const msg = "Hello Ceylon Trail! I would like assistance with obtaining a legal Sri Lanka Tourist Driving Permit (AAC endorsement). Please let me know what documents you need.";
-    window.open(`https://wa.me/94718905282?text=${encodeURIComponent(msg)}`, "_blank");
+    const msg = "Hello lankatrails.lk! I would like assistance with obtaining a legal Sri Lanka Tourist Driving Permit (AAC endorsement). Please let me know what documents you need.";
+    window.open(`https://wa.me/94714877742?text=${encodeURIComponent(msg)}`, "_blank");
   };
 
   return (
@@ -56,7 +56,7 @@ export const PermitModal: React.FC<PermitModalProps> = ({ isOpen, onClose }) => 
               ✨ Skip The Hassle &amp; Hours in Colombo Government Queues!
             </span>
             <span>
-              Ceylon Trail takes care of the entire administrative paperwork prior to your arrival.
+              lankatrails.lk will handle all the documentation works and handover the driving permit to you.
               Simply email or WhatsApp a clear photo of your home driver&apos;s license and passport photo
               page. Your verified legal driving permit will be handed over to you directly at the
               Katunayake Airport (BIA) terminal gate!

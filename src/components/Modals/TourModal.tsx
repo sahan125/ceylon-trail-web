@@ -43,14 +43,14 @@ export const TourModal: React.FC<TourModalProps> = ({ isOpen, onClose, tour }) =
         ];
 
   const handleBookTour = () => {
-    const msg = `Hello Ceylon Trail! I am interested in booking the tour package:%0A` +
+    const msg = `Hello lankatrails.lk! I am interested in booking the tour package:%0A` +
       `🧭 *Tour:* ${tour.title}%0A` +
       `⏱️ *Duration:* ${tour.duration}%0A` +
       `📍 *Route:* ${routeDisplay}%0A` +
       `💰 *Price:* $${tour.price} ${tour.priceLabel || "/ Complete Group"}%0A` +
       `Please check available dates and vehicle options for my travel group.`;
 
-    window.open(`https://wa.me/94718905282?text=${msg}`, "_blank");
+    window.open(`https://wa.me/94714877742?text=${msg}`, "_blank");
   };
 
   return (

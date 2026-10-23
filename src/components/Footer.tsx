@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import {
   MapPin,
   Phone,
@@ -30,55 +29,61 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Col 1: Brand Info (Span 4) */}
           <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center text-slate-900 font-black text-sm">
-                CT
+              <div className="w-9 h-9 rounded-lg bg-linear-to-br from-slate-900 to-[#08101E] border border-slate-700 flex items-center justify-center text-amber-400 font-black text-sm">
+                LT
               </div>
               <span className="text-lg font-black tracking-tight text-white">
-                Ceylon Trail Sri Lanka
+                lankatrails.lk
               </span>
             </div>
 
             <p className="text-xs text-slate-300 leading-relaxed font-normal">
-              Premier tourist mobility car rentals in Sri Lanka. Providing international visitors with
-              guaranteed pricing, comprehensive insurance, BIA terminal airport pickups and
-              endorsements, and pristine vehicles dedicated to trip Colombo BIA Airport.
+              Premier tourist mobility car rentals and curated journeys in Sri Lanka. Providing
+              international visitors with guaranteed pricing, full comprehensive insurance, BIA
+              airport terminal gate handovers, and prompt driving permit processing.
             </p>
 
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/90 border border-slate-700 text-amber-400 text-xs font-semibold">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800/90 border border-slate-700 text-emerald-400 text-xs font-semibold">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>SLTDA LICENSE: TSL/CAR/2023/0144</span>
+              <span>Full Comprehensive Tourist Insurance</span>
             </div>
           </div>
 
-          {/* Col 2: Airport Hub (Span 3) */}
+          {/* Col 2: Airport Hub & Office (Span 3) */}
           <div className="lg:col-span-3 space-y-3">
             <h4 className="text-sm font-bold uppercase tracking-wider text-white">
-              Airport Operations &amp; Hub
+              Operations &amp; Contact
             </h4>
 
             <ul className="space-y-3 text-xs text-slate-300">
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-orange-400 shrink-0 mt-0.5" />
                 <span>
-                  48/A Airport Access Road, Katunayake (1 Min from Bandaranaike International Airport BIA Arrivals)
+                  Kotawilakanda, Pahamune, Narammala, Sri Lanka
+                </span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <MapPin className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <span>
+                  BIA Katunayake Airport Arrivals Handover Hub
                 </span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-emerald-400 shrink-0" />
                 <a
-                  href="https://wa.me/94718905282"
+                  href="https://wa.me/94714877742"
                   className="hover:text-white transition-colors"
                 >
-                  +94 71 890 5282 (Hotline &amp; WhatsApp)
+                  +9471 487 7742 (Hotline &amp; WhatsApp)
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-sky-400 shrink-0" />
                 <a
-                  href="mailto:booking@ceylontrail.lk"
+                  href="mailto:lankatrails.booking@gmail.com"
                   className="hover:text-white transition-colors"
                 >
-                  booking@ceylontrail.lk
+                  lankatrails.booking@gmail.com
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
@@ -88,7 +93,7 @@ export const Footer: React.FC<FooterProps> = ({
             </ul>
           </div>
 
-          {/* Col 3: Quick Links (Span 2) */}
+          {/* Col 3: Quick Links (Span 2) - Admin link removed */}
           <div className="lg:col-span-2 space-y-3">
             <h4 className="text-sm font-bold uppercase tracking-wider text-white">
               Quick Links
@@ -115,7 +120,7 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <a href="#services" className="hover:text-orange-400 transition-colors">
-                  BIA Airport Meet &amp; Greet
+                  BIA Airport Handover
                 </a>
               </li>
               <li>
@@ -123,17 +128,8 @@ export const Footer: React.FC<FooterProps> = ({
                   onClick={onOpenTermsModal}
                   className="hover:text-orange-400 transition-colors text-left cursor-pointer"
                 >
-                  Rental Terms &amp; Insurance
+                  Rental Terms &amp; Policies
                 </button>
-              </li>
-              <li>
-                <Link
-                  href="/admin"
-                  className="hover:text-orange-400 text-orange-300 font-semibold transition-colors flex items-center gap-1"
-                >
-                  <span>Admin Dashboard</span>
-                  <span className="text-[9px] bg-orange-600/30 text-orange-400 px-1 py-0.2 rounded">Desk</span>
-                </Link>
               </li>
             </ul>
           </div>
@@ -145,8 +141,8 @@ export const Footer: React.FC<FooterProps> = ({
             </h4>
 
             <p className="text-xs text-slate-300 leading-relaxed">
-              Secure cashless card processing and refundable deposits handed with certified financial
-              institutions.
+              Transparent transactions with trusted payment handling, roadside support, and verified
+              tourist services.
             </p>
 
             <div className="grid grid-cols-2 gap-2 text-[10.5px] font-bold text-slate-200">
@@ -179,7 +175,7 @@ export const Footer: React.FC<FooterProps> = ({
                 4.9 / 5.0
               </span>
               <span className="text-[11px] text-slate-300">
-                (380+ Tourist Reviews)
+                (Tourist Verified Service)
               </span>
             </div>
           </div>
@@ -188,7 +184,7 @@ export const Footer: React.FC<FooterProps> = ({
         {/* Bottom Bar */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-300">
           <div>
-            © 2026 Ceylon Trail Tourist Rentals (Pvt) Ltd. All rights reserved. Registered under SLTDA.
+            © 2026 lankatrails.lk. All rights reserved.
           </div>
 
           <div className="flex items-center gap-5">
@@ -197,11 +193,11 @@ export const Footer: React.FC<FooterProps> = ({
             </button>
             <span>•</span>
             <button onClick={onOpenTermsModal} className="hover:text-white transition-colors cursor-pointer">
-              Terms of Service
+              Terms &amp; Conditions
             </button>
             <span>•</span>
-            <a href="#about" className="hover:text-white transition-colors">
-              FAQ
+            <a href="#services" className="hover:text-white transition-colors">
+              Services
             </a>
           </div>
         </div>

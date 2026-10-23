@@ -679,7 +679,7 @@ export const TourManagement: React.FC<TourManagementProps> = ({
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Classic Ceylon Explorer"
+                    placeholder="e.g. Classic Lanka Explorer"
                     value={formTitle}
                     onChange={(e) => setFormTitle(e.target.value)}
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-hidden focus:border-orange-500"

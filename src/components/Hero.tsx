@@ -8,14 +8,19 @@ import {
   MapPin,
   Calendar,
   Clock,
-  Search,
   Check,
   Zap,
   Star,
+  MessageCircle,
+  Loader2,
+  Phone,
+  User,
 } from "lucide-react";
+import { VEHICLES } from "@/data/mockData";
+import { supabase } from "@/lib/supabase";
 
 interface HeroProps {
-  onSearchFleet: (filters: {
+  onSearchFleet?: (filters: {
     rentalType: "self" | "chauffeur";
     location: string;
     pickupDate: string;
@@ -28,7 +33,7 @@ interface HeroProps {
 export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
   const [rentalType, setRentalType] = useState<"self" | "chauffeur">("self");
   const [returnSameLocation, setReturnSameLocation] = useState(true);
-  const [whatsappConfirm, setWhatsappConfirm] = useState(true);
+  const [selectedVehicleId, setSelectedVehicleId] = useState(VEHICLES[0].id);
 
   const [location, setLocation] = useState("Bandaranaike Intl. Airport (BIA)");
   const [pickupDate, setPickupDate] = useState("2026-04-10");
@@ -36,25 +41,127 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
   const [returnDate, setReturnDate] = useState("2026-04-18");
   const [returnTime, setReturnTime] = useState("04:00 PM");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  const selectedVehicle =
+    VEHICLES.find((v) => v.id === selectedVehicleId) || VEHICLES[0];
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSearchFleet({
-      rentalType,
-      location,
-      pickupDate,
-      pickupTime,
-      returnDate,
-      returnTime,
-    });
-    // Smooth scroll to fleet section
-    const fleetSection = document.getElementById("fleet");
-    if (fleetSection) {
-      fleetSection.scrollIntoView({ behavior: "smooth" });
+    setIsSubmitting(true);
+
+    const clientNameValue = customerName.trim() || "Guest Traveler";
+    const phoneValue = customerPhone.trim() || "Not provided";
+
+    let bookingRef = `REQ-${Date.now().toString().slice(-4)}`;
+
+    try {
+      // 1. Log to Supabase 'bookings' table
+      try {
+        const { data: supabaseData, error: sbError } = await supabase
+          .from("bookings")
+          .insert([
+            {
+              full_name: clientNameValue,
+              email: "Form Inquiry",
+              phone: phoneValue,
+              vehicle: selectedVehicle.name,
+              pickup_date: pickupDate,
+              return_date: returnDate,
+              pickup_location: location,
+              status: "Pending",
+            },
+          ])
+          .select();
+
+        if (!sbError && supabaseData && supabaseData[0]?.id) {
+          bookingRef = String(supabaseData[0].id);
+        }
+      } catch (err) {
+        console.warn("Direct Supabase insert notice:", err);
+      }
+
+      // 2. Also log to /api/bookings store
+      try {
+        const res = await fetch("/api/bookings", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            clientName: clientNameValue,
+            phone: phoneValue,
+            email: "Inquiry via Website",
+            vehicleId: selectedVehicle.id,
+            vehicleName: selectedVehicle.name,
+            vehicleCategory: selectedVehicle.category,
+            rentalType,
+            location,
+            pickupDate,
+            pickupTime,
+            returnDate,
+            returnTime,
+            status: "Pending",
+          }),
+        });
+        const json = await res.json();
+        if (json?.data?.id) {
+          bookingRef = json.data.id;
+        }
+      } catch (apiErr) {
+        console.warn("API booking notice:", apiErr);
+      }
+
+      setSubmitSuccess(true);
+
+      // 3. Generate pre-filled WhatsApp message to +9471 487 7742
+      const serviceName =
+        rentalType === "self" ? "Self-Drive Rental" : "Chauffeur Guided Tour";
+      const message =
+        `Hello lankatrails.lk! I would like to book a vehicle:%0A%0A` +
+        `📋 *Booking Ref:* ${bookingRef}%0A` +
+        `🚗 *Chosen Vehicle:* ${selectedVehicle.name} (${selectedVehicle.category})%0A` +
+        `🛠️ *Service:* ${serviceName}%0A` +
+        `📍 *Pickup Location:* ${location}%0A` +
+        `📅 *Pickup Date & Time:* ${pickupDate} at ${pickupTime}%0A` +
+        `🏁 *Return Date & Time:* ${returnDate} at ${returnTime}%0A` +
+        (customerName ? `👤 *Name:* ${customerName}%0A` : "") +
+        (customerPhone ? `📞 *Phone/WhatsApp:* ${customerPhone}%0A` : "") +
+        `%0APlease confirm availability and pricing for this request.`;
+
+      setTimeout(() => {
+        window.open(`https://wa.me/94714877742?text=${message}`, "_blank");
+      }, 400);
+
+      if (onSearchFleet) {
+        onSearchFleet({
+          rentalType,
+          location,
+          pickupDate,
+          pickupTime,
+          returnDate,
+          returnTime,
+        });
+      }
+    } catch (error) {
+      console.error("Booking submission error:", error);
+      const fallbackMsg = `Hello lankatrails.lk! I want to book ${selectedVehicle.name} (${rentalType === "self" ? "Self-Drive" : "Chauffeur"}) from ${pickupDate} (${pickupTime}) to ${returnDate} (${returnTime}) at ${location}. Name: ${clientNameValue}, Phone: ${phoneValue}`;
+      window.open(
+        `https://wa.me/94714877742?text=${encodeURIComponent(fallbackMsg)}`,
+        "_blank"
+      );
+      setSubmitSuccess(true);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <section id="hero" className="relative w-full overflow-hidden bg-slate-900 pt-10 pb-16 lg:pb-24">
+    <section
+      id="hero"
+      className="relative w-full overflow-hidden bg-slate-900 pt-10 pb-16 lg:pb-24"
+    >
       {/* Background Hero Image with Gradients */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -84,23 +191,12 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
           </h1>
 
           <p className="mt-4 text-sm sm:text-base lg:text-lg text-slate-200 leading-relaxed font-normal max-w-3xl">
-            Official S.L.T.D.A.-registered tourist fleet. Pristine vehicles delivered directly inside
-            Katunayake Airport arrivals gate with zero hidden deposit deductions, English-fluent
-            tourist chauffeurs, and legally certified self-drive permits ready before your flight lands.
+            Pristine vehicles delivered directly inside Katunayake Airport arrivals gate, English-fluent tourist chauffeurs, and legally certified self-drive permits ready before your flight lands.
           </p>
         </div>
 
         {/* Highlight Stats Row */}
         <div className="flex flex-wrap items-center gap-8 sm:gap-14 mb-10 text-white">
-          <div className="flex flex-col">
-            <span className="text-2xl sm:text-4xl font-extrabold text-[#F59E0B] tracking-tight">
-              12,400+
-            </span>
-            <span className="text-xs sm:text-sm text-slate-300 font-medium mt-0.5">
-              Tourists Handled
-            </span>
-          </div>
-          <div className="h-8 w-px bg-white/20 hidden sm:block" />
           <div className="flex flex-col">
             <span className="text-2xl sm:text-4xl font-extrabold text-[#F59E0B] tracking-tight">
               100%
@@ -120,10 +216,10 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
           </div>
         </div>
 
-        {/* Booking / Search Card */}
+        {/* Booking / Dynamic Reservation Card */}
         <div className="w-full bg-white rounded-2xl shadow-2xl p-5 sm:p-7 border border-slate-100 text-slate-800">
           <form onSubmit={handleSubmit}>
-            {/* Card Header: Tabs & Checkbox Options */}
+            {/* Card Header: Tabs & Options */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between pb-5 border-b border-slate-100 gap-4">
               {/* Rental Type Tabs */}
               <div className="inline-flex p-1 bg-slate-100 rounded-xl gap-1">
@@ -165,22 +261,38 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
                   <span>Return to same location</span>
                 </label>
                 <span className="text-slate-300 hidden sm:inline">|</span>
-                <label className="flex items-center gap-2 cursor-pointer hover:text-slate-900">
-                  <input
-                    type="checkbox"
-                    checked={whatsappConfirm}
-                    onChange={(e) => setWhatsappConfirm(e.target.checked)}
-                    className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 cursor-pointer"
-                  />
-                  <span>Instant WhatsApp Confirmation</span>
-                </label>
+                <span className="flex items-center gap-1.5 text-emerald-700 font-bold">
+                  <MessageCircle className="w-4 h-4 text-emerald-600" />
+                  Direct WhatsApp Booking (+9471 487 7742)
+                </span>
               </div>
             </div>
 
-            {/* Input Row: Location, Dates, Times & Action */}
+            {/* Input Row 1: Vehicle & Location */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3.5 pt-5">
+              {/* Chosen Vehicle / Car Dropdown */}
+              <div className="lg:col-span-6 bg-slate-50 border border-slate-200 rounded-xl p-3 focus-within:ring-2 focus-within:ring-orange-500/20 focus-within:border-orange-500 transition-all">
+                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-600 mb-1">
+                  Chosen Vehicle / Car
+                </label>
+                <div className="flex items-center gap-2">
+                  <Car className="w-4 h-4 text-orange-500 shrink-0" />
+                  <select
+                    value={selectedVehicleId}
+                    onChange={(e) => setSelectedVehicleId(e.target.value)}
+                    className="w-full bg-transparent text-xs sm:text-sm font-semibold text-slate-900 focus:outline-hidden cursor-pointer"
+                  >
+                    {VEHICLES.map((v) => (
+                      <option key={v.id} value={v.id}>
+                        {v.name} ({v.category}) — ${v.price}/day
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
               {/* Pickup Location */}
-              <div className="lg:col-span-4 bg-slate-50 border border-slate-200 rounded-xl p-3 focus-within:ring-2 focus-within:ring-orange-500/20 focus-within:border-orange-500 transition-all">
+              <div className="lg:col-span-6 bg-slate-50 border border-slate-200 rounded-xl p-3 focus-within:ring-2 focus-within:ring-orange-500/20 focus-within:border-orange-500 transition-all">
                 <label className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-600 mb-1">
                   Pickup Location
                 </label>
@@ -210,7 +322,10 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
                   </select>
                 </div>
               </div>
+            </div>
 
+            {/* Input Row 2: Dates, Times & Customer Info */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3.5 pt-3.5">
               {/* Pickup Date & Time */}
               <div className="lg:col-span-3 bg-slate-50 border border-slate-200 rounded-xl p-3 focus-within:ring-2 focus-within:ring-orange-500/20 focus-within:border-orange-500 transition-all">
                 <label className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-600 mb-1">
@@ -272,32 +387,83 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
                 </div>
               </div>
 
-              {/* CTA Search Button */}
-              <div className="lg:col-span-2 flex items-center">
+              {/* Client Name & Phone */}
+              <div className="lg:col-span-3 bg-slate-50 border border-slate-200 rounded-xl p-3 focus-within:ring-2 focus-within:ring-orange-500/20 focus-within:border-orange-500 transition-all">
+                <label className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-600 mb-1">
+                  Your Name &amp; WhatsApp
+                </label>
+                <div className="flex items-center gap-2">
+                  <User className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                  <input
+                    type="text"
+                    placeholder="Full Name"
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    className="w-1/2 bg-transparent text-xs font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-hidden"
+                  />
+                  <span className="text-slate-300">|</span>
+                  <Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                  <input
+                    type="text"
+                    placeholder="WhatsApp No."
+                    value={customerPhone}
+                    onChange={(e) => setCustomerPhone(e.target.value)}
+                    className="w-1/2 bg-transparent text-xs font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-hidden"
+                  />
+                </div>
+              </div>
+
+              {/* Submit to WhatsApp & Admin Button */}
+              <div className="lg:col-span-3 flex items-center">
                 <button
                   type="submit"
-                  className="w-full h-full min-h-[52px] bg-[#EA580C] hover:bg-[#C2410C] text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all transform active:scale-95 cursor-pointer px-3"
+                  disabled={isSubmitting}
+                  className="w-full h-full min-h-[52px] bg-[#10B981] hover:bg-[#059669] text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all transform active:scale-95 cursor-pointer px-4"
                 >
-                  <Search className="w-4 h-4" />
-                  <span>Search Available Fleet</span>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Submitting...</span>
+                    </>
+                  ) : (
+                    <>
+                      <MessageCircle className="w-4 h-4" />
+                      <span>Book via WhatsApp</span>
+                    </>
+                  )}
                 </button>
               </div>
             </div>
 
-            {/* Bottom Guarantee Checklist */}
+            {/* Success Notification Banner */}
+            {submitSuccess && (
+              <div className="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs font-semibold flex items-center justify-between gap-2 animate-in fade-in">
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-600" />
+                  <span>
+                    Your booking request was submitted to the Admin Dashboard and your pre-filled WhatsApp chat is opening!
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSubmitSuccess(false)}
+                  className="text-emerald-700 hover:text-emerald-900 font-bold"
+                >
+                  Dismiss
+                </button>
+              </div>
+            )}
+
+            {/* Bottom Highlights (Old badges removed) */}
             <div className="mt-5 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-y-2 text-xs text-slate-600">
               <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 font-medium">
                 <span className="flex items-center gap-1.5 text-slate-700">
                   <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[2.5]" />
-                  Free cancellation up to 48hrs
+                  24/7 BIA Airport Terminal Gate Handover
                 </span>
                 <span className="flex items-center gap-1.5 text-slate-700">
                   <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[2.5]" />
-                  No international card swipe surcharge
-                </span>
-                <span className="flex items-center gap-1.5 text-slate-700">
-                  <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[2.5]" />
-                  Zero-deposit cash/card hold options
+                  Driving Permits Handled Prior to Landing
                 </span>
               </div>
 

@@ -1,3 +1,52 @@
+export interface PricingTier {
+  days: number;
+  label: string;
+  mileage: string;
+  priceUSD: number;
+  extraDayUSD: number;
+}
+
+export interface ModelPricingTable {
+  category: "Wagon" | "Hatchback" | "Sedan";
+  title: string;
+  tiers: PricingTier[];
+}
+
+export const VEHICLE_PRICING_TABLES: ModelPricingTable[] = [
+  {
+    category: "Wagon",
+    title: "Wagon Car Model Prices",
+    tiers: [
+      { days: 5, label: "5 Days No mileage restrictions", mileage: "0 km (Unlimited)", priceUSD: 250, extraDayUSD: 50 },
+      { days: 10, label: "10 Days No mileage restrictions", mileage: "0 km (Unlimited)", priceUSD: 500, extraDayUSD: 45 },
+      { days: 15, label: "15 Days No mileage restrictions", mileage: "0 km (Unlimited)", priceUSD: 725, extraDayUSD: 45 },
+      { days: 20, label: "20 Days No mileage restrictions", mileage: "0 km (Unlimited)", priceUSD: 800, extraDayUSD: 40 },
+      { days: 25, label: "25 Days No mileage restrictions", mileage: "0 km (Unlimited)", priceUSD: 1150, extraDayUSD: 40 },
+      { days: 30, label: "30 Days No mileage restrictions", mileage: "0 km (Unlimited)", priceUSD: 1050, extraDayUSD: 40 },
+    ],
+  },
+  {
+    category: "Hatchback",
+    title: "Hatchback Car Model Prices",
+    tiers: [
+      { days: 5, label: "5 Days No mileage restrictions", mileage: "0 km (Unlimited)", priceUSD: 275, extraDayUSD: 55 },
+      { days: 10, label: "10 Days No mileage restrictions", mileage: "0 km (Unlimited)", priceUSD: 550, extraDayUSD: 55 },
+      { days: 15, label: "15 Days No mileage restrictions", mileage: "0 km (Unlimited)", priceUSD: 825, extraDayUSD: 50 },
+      { days: 20, label: "20 Days No mileage restrictions", mileage: "0 km (Unlimited)", priceUSD: 1050, extraDayUSD: 45 },
+    ],
+  },
+  {
+    category: "Sedan",
+    title: "Sedan Car Model Prices",
+    tiers: [
+      { days: 5, label: "5 Days No Mileage Restrictions", mileage: "0 km (Unlimited)", priceUSD: 300, extraDayUSD: 60 },
+      { days: 10, label: "10 Days No Mileage Restrictions", mileage: "0 km (Unlimited)", priceUSD: 600, extraDayUSD: 55 },
+      { days: 15, label: "15 Days No Mileage Restrictions", mileage: "0 km (Unlimited)", priceUSD: 875, extraDayUSD: 55 },
+      { days: 20, label: "20 Days No Mileage Restrictions", mileage: "0 km (Unlimited)", priceUSD: 1150, extraDayUSD: 50 },
+    ],
+  },
+];
+
 export interface Vehicle {
   id: string;
   name: string;
@@ -16,6 +65,7 @@ export interface Vehicle {
   };
   price: number;
   priceUnit: string;
+  pricingCategory?: "Wagon" | "Hatchback" | "Sedan";
 }
 
 export interface TourPackage {
@@ -49,7 +99,7 @@ export const VEHICLES: Vehicle[] = [
     badge: "TOP HILL ECONOMY",
     badgeType: "green",
     metric: "⛽ 22 km/L",
-    category: "COMPACT HYBRID",
+    category: "WAGON CAR MODEL",
     rating: 4.9,
     type: "Hatchbacks",
     image: "/images/wagon-r.png",
@@ -57,10 +107,31 @@ export const VEHICLES: Vehicle[] = [
       seats: "4 Seats",
       transmission: "Automatic",
       luggage: "2 Bags",
-      ac: "Dual A/C",
+      ac: "Full A/C",
     },
     price: 25,
     priceUnit: "Per day / Unlimited KM",
+    pricingCategory: "Wagon",
+  },
+  {
+    id: "hatchback-swift",
+    name: "Suzuki Swift / Alto Hatchback",
+    badge: "POPULAR CITY & COAST",
+    badgeType: "orange",
+    metric: "⛽ 21 km/L",
+    category: "HATCHBACK MODEL",
+    rating: 4.88,
+    type: "Hatchbacks",
+    image: "/images/wagon-r.png",
+    specs: {
+      seats: "4-5 Seats",
+      transmission: "Automatic",
+      luggage: "2 Bags",
+      ac: "Full A/C",
+    },
+    price: 28,
+    priceUnit: "Per day / Unlimited KM",
+    pricingCategory: "Hatchback",
   },
   {
     id: "axio-hybrid",
@@ -68,7 +139,7 @@ export const VEHICLES: Vehicle[] = [
     badge: "TOURIST'S CHOICE",
     badgeType: "blue",
     metric: "⛽ 19 km/L",
-    category: "COMFORT SEDAN",
+    category: "SEDAN CAR MODEL",
     rating: 4.9,
     type: "Sedans",
     image: "/images/axio-sedan.png",
@@ -76,10 +147,11 @@ export const VEHICLES: Vehicle[] = [
       seats: "5 Seats",
       transmission: "Automatic",
       luggage: "3 Large Bags",
-      ac: "Climate A/C",
+      ac: "Full A/C",
     },
     price: 38,
     priceUnit: "Per day / Unlimited KM",
+    pricingCategory: "Sedan",
   },
   {
     id: "raize-turbo",
@@ -95,7 +167,7 @@ export const VEHICLES: Vehicle[] = [
       seats: "5 Seats",
       transmission: "Automatic",
       luggage: "3 Suitcases",
-      ac: "High View",
+      ac: "Full A/C",
     },
     price: 45,
     priceUnit: "Per day / Unlimited KM",
@@ -114,7 +186,7 @@ export const VEHICLES: Vehicle[] = [
       seats: "7-10 Seats",
       transmission: "Automatic",
       luggage: "6 Large Bags",
-      ac: "Rear AC Vents",
+      ac: "Full A/C",
     },
     price: 65,
     priceUnit: "Per day / Unlimited KM",

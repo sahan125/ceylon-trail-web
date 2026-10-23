@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Compass, ArrowRight, MapPin, Sparkles, Loader2 } from "lucide-react";
+import { Compass, ArrowRight, MapPin, Sparkles, Loader2, MessageCircle } from "lucide-react";
 import { TourPackage, normalizeTourPackage } from "@/types/tour";
 import { supabase } from "@/lib/supabase";
 import { SEED_TOURS } from "@/data/toursData";
@@ -177,6 +177,55 @@ export const Tours: React.FC<ToursProps> = ({
               </div>
             </div>
           ))}
+
+          {/* Custom Tour Package Card - No Price Displayed */}
+          <div className="bg-linear-to-br from-slate-900 via-slate-850 to-[#08101E] rounded-2xl overflow-hidden border border-slate-700 shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col justify-between text-white group">
+            {/* Header Visual */}
+            <div className="relative w-full h-56 overflow-hidden bg-slate-800 flex items-center justify-center p-6 text-center">
+              <div className="absolute inset-0 bg-radial from-amber-500/15 via-transparent to-transparent" />
+              <div className="relative z-10 flex flex-col items-center">
+                <div className="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center mb-3 shadow-inner group-hover:scale-110 transition-transform">
+                  <Sparkles className="w-7 h-7" />
+                </div>
+                <span className="text-[11px] font-black uppercase tracking-widest text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+                  Tailor-Made Itinerary
+                </span>
+                <span className="text-xs text-slate-300 font-medium mt-2">
+                  Flexible Route &amp; Dedicated Driver
+                </span>
+              </div>
+            </div>
+
+            {/* Card Body */}
+            <div className="p-6 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 className="text-xl font-black text-white tracking-tight mb-2.5">
+                  Create Your Own Custom Tour Package
+                </h3>
+                <p className="text-xs text-slate-300 leading-relaxed font-normal mb-6">
+                  Design your dream Sri Lanka vacation. Tell us where you want to visit, your travel dates, and group size. Our tour planners will analyze your route and provide an instant manual quote tailored just for you.
+                </p>
+              </div>
+
+              {/* Action - No price displayed */}
+              <div className="pt-4 border-t border-slate-700/60 flex items-center justify-between">
+                <span className="text-xs font-bold text-amber-300">
+                  Manual Quotation via WhatsApp
+                </span>
+                <a
+                  href={`https://wa.me/94714877742?text=${encodeURIComponent(
+                    "Hello lankatrails.lk! I would like to create my own custom tour package in Sri Lanka. Here are my preferred destinations, dates, and group size:"
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-md hover:shadow-lg cursor-pointer transform active:scale-95"
+                >
+                  <MessageCircle className="w-3.5 h-3.5 fill-white" />
+                  <span>Chat With Us</span>
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
