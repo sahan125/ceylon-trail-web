@@ -104,7 +104,7 @@ export const VEHICLES: Vehicle[] = [
     category: "WAGON CAR MODEL",
     rating: 4.9,
     type: "Hatchbacks",
-    image: "/images/wagon-r.png",
+    image: "/images/wagon-r-fleet.png",
     specs: {
       seats: "4 Seats",
       transmission: "Automatic",
@@ -126,7 +126,7 @@ export const VEHICLES: Vehicle[] = [
     category: "HATCHBACK MODEL",
     rating: 4.88,
     type: "Hatchbacks",
-    image: "/images/wagon-r.png",
+    image: "/images/wagon-r-fleet.png",
     specs: {
       seats: "4-5 Seats",
       transmission: "Automatic",
@@ -148,7 +148,7 @@ export const VEHICLES: Vehicle[] = [
     category: "SEDAN CAR MODEL",
     rating: 4.9,
     type: "Sedans",
-    image: "/images/axio-sedan.png",
+    image: "/images/axio-sedan-fleet.png",
     specs: {
       seats: "5 Seats",
       transmission: "Automatic",
