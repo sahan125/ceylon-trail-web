@@ -5,12 +5,12 @@ import { MessageCircle } from "lucide-react";
 
 export const FloatingWhatsApp: React.FC = () => {
   return (
-    <aside aria-label="Support chat" className="fixed bottom-6 right-6 z-40 flex items-center gap-2">
+    <aside aria-label="Support chat" className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-40 flex items-center gap-2">
       <a
         href="https://wa.me/94714877742"
         target="_blank"
         rel="noopener noreferrer"
-        className="group flex items-center gap-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white pl-4 pr-5 py-3 rounded-full shadow-2xl hover:shadow-emerald-500/30 transition-all transform hover:scale-105"
+        className="group flex items-center gap-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white pl-4 pr-5 py-3 min-h-[44px] rounded-full shadow-2xl hover:shadow-emerald-500/30 transition-all transform hover:scale-105"
         title="Chat with Lankatrails.lk on WhatsApp"
       >
         <div className="relative">

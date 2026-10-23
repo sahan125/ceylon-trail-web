@@ -54,7 +54,7 @@ export const TourModal: React.FC<TourModalProps> = ({ isOpen, onClose, tour }) =
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200">
         {/* Tour Image Header */}
         <div className="relative w-full h-64 bg-slate-900">
@@ -69,7 +69,7 @@ export const TourModal: React.FC<TourModalProps> = ({ isOpen, onClose, tour }) =
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-full bg-black/50 text-white hover:bg-black/80 transition-colors cursor-pointer"
+            className="absolute top-4 right-4 w-10 h-10 md:w-9 md:h-9 flex items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/80 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -90,7 +90,7 @@ export const TourModal: React.FC<TourModalProps> = ({ isOpen, onClose, tour }) =
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 space-y-6">
+        <div className="p-4 md:p-6 space-y-4 md:space-y-6">
           {/* Tour Overview Section */}
           <div className="space-y-4">
             <div>
@@ -148,7 +148,7 @@ export const TourModal: React.FC<TourModalProps> = ({ isOpen, onClose, tour }) =
           <div className="pt-3 border-t border-slate-100 flex items-center justify-end">
             <button
               onClick={handleBookTour}
-              className="w-full sm:w-auto bg-[#EA580C] hover:bg-[#C2410C] text-white px-8 py-3 rounded-full font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all cursor-pointer"
+              className="w-full sm:w-auto min-h-[44px] bg-[#EA580C] hover:bg-[#C2410C] text-white px-8 py-3 rounded-full font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all cursor-pointer"
             >
               <MessageCircle className="w-4 h-4" />
               <span>Inquire via WhatsApp</span>

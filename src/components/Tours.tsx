@@ -75,7 +75,7 @@ export const Tours: React.FC<ToursProps> = ({
   }, []);
 
   return (
-    <section id="tours" className="w-full py-16 bg-[#F4F7FB] border-b border-slate-100">
+    <section id="tours" className="w-full py-12 md:py-16 bg-[#F4F7FB] border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
@@ -84,7 +84,7 @@ export const Tours: React.FC<ToursProps> = ({
               <Compass className="w-3.5 h-3.5 text-sky-600" />
               HANDCRAFTED JOURNEYS
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-950 tracking-tight">
+            <h2 className="text-2xl md:text-4xl font-black text-slate-950 tracking-tight">
               Curated Scenic Tour Packages
             </h2>
             <p className="mt-2 text-sm sm:text-base text-slate-600 max-w-2xl font-normal">
@@ -95,7 +95,7 @@ export const Tours: React.FC<ToursProps> = ({
 
           <button
             onClick={() => onViewAllItineraries(tours)}
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-800 hover:text-orange-600 transition-colors self-start md:self-end group cursor-pointer"
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-slate-800 hover:text-orange-600 transition-colors self-start md:self-end group cursor-pointer min-h-[44px]"
           >
             <span>View All {tours.length} Itineraries</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -111,7 +111,7 @@ export const Tours: React.FC<ToursProps> = ({
         )}
 
         {/* Tour Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
           {tours.map((tour, idx) => (
             <div
               key={tour.id || idx}
@@ -160,7 +160,7 @@ export const Tours: React.FC<ToursProps> = ({
                 <div className="pt-4 border-t border-slate-100">
                   <button
                     onClick={() => onSelectTour(tour)}
-                    className={`w-full py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-xs cursor-pointer text-center flex items-center justify-center gap-2 ${
+                    className={`w-full min-h-[44px] py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-xs cursor-pointer text-center flex items-center justify-center gap-2 ${
                       idx === 2 || tour.buttonColor === "orange"
                         ? "bg-[#EA580C] hover:bg-[#C2410C] text-white hover:shadow-md"
                         : "bg-[#08101E] hover:bg-slate-800 text-white hover:shadow-md"
@@ -216,7 +216,7 @@ export const Tours: React.FC<ToursProps> = ({
               </div>
 
               {/* Action - No price displayed */}
-              <div className="pt-4 border-t border-slate-700/60 flex items-center justify-between">
+              <div className="pt-4 border-t border-slate-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <span className="text-xs font-bold text-amber-300">
                   Manual Quotation via WhatsApp
                 </span>
@@ -226,7 +226,7 @@ export const Tours: React.FC<ToursProps> = ({
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-md hover:shadow-lg cursor-pointer transform active:scale-95"
+                  className="w-full sm:w-auto min-h-[44px] inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-md hover:shadow-lg cursor-pointer transform active:scale-95"
                 >
                   <MessageCircle className="w-3.5 h-3.5 fill-white" />
                   <span>Chat With Us</span>

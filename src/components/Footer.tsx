@@ -23,10 +23,10 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenTermsModal,
 }) => {
   return (
-    <footer id="contact" className="w-full bg-[#08101E] text-slate-300 pt-16 pb-8 border-t border-slate-800">
+    <footer id="contact" className="w-full bg-[#08101E] text-slate-300 py-12 md:pt-16 md:pb-8 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main 4 Column Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-slate-800/80">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 md:gap-10 pb-12 border-b border-slate-800/80">
           {/* Col 1: Brand Info (Span 4) */}
           <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-3">

@@ -17,8 +17,8 @@ export const PermitModal: React.FC<PermitModalProps> = ({ isOpen, onClose }) => 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 p-6 sm:p-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+      <div className="bg-white rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 p-4 sm:p-6 md:p-8">
         <div className="flex items-start justify-between pb-4 border-b border-slate-100">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
@@ -35,7 +35,7 @@ export const PermitModal: React.FC<PermitModalProps> = ({ isOpen, onClose }) => 
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800 cursor-pointer"
+            className="w-10 h-10 md:w-8 md:h-8 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800 cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -84,14 +84,14 @@ export const PermitModal: React.FC<PermitModalProps> = ({ isOpen, onClose }) => 
           <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
             <button
               onClick={handlePermitWhatsApp}
-              className="flex-1 bg-[#10B981] hover:bg-[#059669] text-white py-3 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md cursor-pointer"
+              className="w-full sm:flex-1 min-h-[44px] bg-[#10B981] hover:bg-[#059669] text-white py-3 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md cursor-pointer"
             >
               <MessageCircle className="w-4 h-4" />
               <span>Submit License Via WhatsApp</span>
             </button>
             <button
               onClick={onClose}
-              className="px-5 py-3 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-slate-50 cursor-pointer"
+              className="w-full sm:w-auto min-h-[44px] px-5 py-3 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider hover:bg-slate-50 cursor-pointer flex items-center justify-center"
             >
               Close
             </button>

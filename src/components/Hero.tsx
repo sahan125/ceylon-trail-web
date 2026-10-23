@@ -160,7 +160,7 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
   return (
     <section
       id="hero"
-      className="relative w-full overflow-hidden bg-slate-900 pt-10 pb-16 lg:pb-24"
+      className="relative w-full overflow-hidden bg-slate-900 py-12 md:pt-10 md:pb-16 lg:pb-24"
     >
       {/* Background Hero Image with Gradients */}
       <div className="absolute inset-0 z-0">
@@ -177,56 +177,56 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-bold tracking-wide mb-6 backdrop-blur-md shadow-lg">
-          <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-          <span>THE #1 TRUSTED CHOICE FOR INTERNATIONAL TRAVELERS</span>
+        <div className="inline-flex items-center gap-1.5 md:gap-2 px-3 py-1 md:px-3.5 md:py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-[10.5px] md:text-xs font-bold tracking-wide mb-4 md:mb-6 backdrop-blur-md shadow-lg max-w-full">
+          <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400 shrink-0" />
+          <span className="truncate">THE #1 TRUSTED CHOICE FOR INTERNATIONAL TRAVELERS</span>
         </div>
 
         {/* Hero Headlines */}
-        <div className="max-w-4xl mb-8">
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.15] drop-shadow-md">
+        <div className="max-w-4xl mb-6 md:mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.15] drop-shadow-md">
             Explore Sri Lanka With{" "}
             <span className="text-[#F59E0B] drop-shadow-lg">Freedom</span>{" "}
             &amp; Unrivaled Confidence
           </h1>
 
-          <p className="mt-4 text-sm sm:text-base lg:text-lg text-slate-100 leading-relaxed font-normal max-w-3xl drop-shadow-sm">
+          <p className="mt-3 md:mt-4 text-xs sm:text-sm md:text-base lg:text-lg text-slate-100 leading-relaxed font-normal max-w-3xl drop-shadow-sm">
             Pristine vehicles delivered directly inside Katunayake Airport arrivals gate, English-fluent tourist chauffeurs, and legally certified self-drive permits ready before your flight lands.
           </p>
         </div>
 
         {/* Highlight Stats Row */}
-        <div className="flex flex-wrap items-center gap-8 sm:gap-14 mb-10 text-white">
+        <div className="flex flex-wrap items-center gap-6 sm:gap-10 md:gap-14 mb-8 md:mb-10 text-white">
           <div className="flex flex-col">
-            <span className="text-2xl sm:text-4xl font-extrabold text-[#F59E0B] tracking-tight">
+            <span className="text-xl sm:text-2xl md:text-4xl font-extrabold text-[#F59E0B] tracking-tight">
               100%
             </span>
-            <span className="text-xs sm:text-sm text-slate-300 font-medium mt-0.5">
+            <span className="text-[11px] sm:text-xs md:text-sm text-slate-300 font-medium mt-0.5">
               Refund Guarantee
             </span>
           </div>
           <div className="h-8 w-px bg-white/20 hidden sm:block" />
           <div className="flex flex-col">
-            <span className="text-2xl sm:text-4xl font-extrabold text-[#F59E0B] tracking-tight">
+            <span className="text-xl sm:text-2xl md:text-4xl font-extrabold text-[#F59E0B] tracking-tight">
               24 / 7
             </span>
-            <span className="text-xs sm:text-sm text-slate-300 font-medium mt-0.5">
+            <span className="text-[11px] sm:text-xs md:text-sm text-slate-300 font-medium mt-0.5">
               Islandwide Roadside Aid
             </span>
           </div>
         </div>
 
         {/* Booking / Dynamic Reservation Card */}
-        <div className="w-full bg-white rounded-2xl shadow-2xl p-5 sm:p-7 border border-slate-100 text-slate-800">
+        <div className="w-full bg-white rounded-2xl shadow-2xl p-4 sm:p-5 md:p-7 border border-slate-100 text-slate-800">
           <form onSubmit={handleSubmit}>
             {/* Card Header: Tabs & Options */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between pb-5 border-b border-slate-100 gap-4">
               {/* Rental Type Tabs */}
-              <div className="inline-flex p-1 bg-slate-100 rounded-xl gap-1">
+              <div className="flex flex-col sm:flex-row p-1 bg-slate-100 rounded-xl gap-1 w-full sm:w-auto">
                 <button
                   type="button"
                   onClick={() => setRentalType("self")}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  className={`flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 min-h-[44px] rounded-lg text-xs font-bold transition-all cursor-pointer ${
                     rentalType === "self"
                       ? "bg-slate-900 text-white shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
@@ -238,7 +238,7 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
                 <button
                   type="button"
                   onClick={() => setRentalType("chauffeur")}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  className={`flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 min-h-[44px] rounded-lg text-xs font-bold transition-all cursor-pointer ${
                     rentalType === "chauffeur"
                       ? "bg-slate-900 text-white shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
@@ -280,7 +280,7 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
                   <select
                     value={selectedVehicleId}
                     onChange={(e) => setSelectedVehicleId(e.target.value)}
-                    className="w-full bg-transparent text-xs sm:text-sm font-semibold text-slate-900 focus:outline-hidden cursor-pointer"
+                    className="w-full bg-transparent text-base md:text-xs sm:text-sm font-semibold text-slate-900 focus:outline-hidden cursor-pointer"
                   >
                     {VEHICLES.map((v) => (
                       <option key={v.id} value={v.id}>
@@ -301,7 +301,7 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
                   <select
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    className="w-full bg-transparent text-xs sm:text-sm font-semibold text-slate-900 focus:outline-hidden cursor-pointer"
+                    className="w-full bg-transparent text-base md:text-xs sm:text-sm font-semibold text-slate-900 focus:outline-hidden cursor-pointer"
                   >
                     <option value="Bandaranaike Intl. Airport (BIA)">
                       Bandaranaike Intl. Airport (BIA)
@@ -337,13 +337,13 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
                     type="date"
                     value={pickupDate}
                     onChange={(e) => setPickupDate(e.target.value)}
-                    className="bg-transparent text-xs font-semibold text-slate-900 focus:outline-hidden cursor-pointer w-28"
+                    className="bg-transparent text-base md:text-xs font-semibold text-slate-900 focus:outline-hidden cursor-pointer w-full sm:w-28"
                   />
                   <Clock className="w-3.5 h-3.5 text-slate-600 shrink-0 ml-1" />
                   <select
                     value={pickupTime}
                     onChange={(e) => setPickupTime(e.target.value)}
-                    className="bg-transparent text-xs font-semibold text-slate-900 focus:outline-hidden cursor-pointer"
+                    className="bg-transparent text-base md:text-xs font-semibold text-slate-900 focus:outline-hidden cursor-pointer"
                   >
                     <option>08:00 AM</option>
                     <option>10:00 AM</option>
@@ -368,13 +368,13 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
                     type="date"
                     value={returnDate}
                     onChange={(e) => setReturnDate(e.target.value)}
-                    className="bg-transparent text-xs font-semibold text-slate-900 focus:outline-hidden cursor-pointer w-28"
+                    className="bg-transparent text-base md:text-xs font-semibold text-slate-900 focus:outline-hidden cursor-pointer w-full sm:w-28"
                   />
                   <Clock className="w-3.5 h-3.5 text-slate-600 shrink-0 ml-1" />
                   <select
                     value={returnTime}
                     onChange={(e) => setReturnTime(e.target.value)}
-                    className="bg-transparent text-xs font-semibold text-slate-900 focus:outline-hidden cursor-pointer"
+                    className="bg-transparent text-base md:text-xs font-semibold text-slate-900 focus:outline-hidden cursor-pointer"
                   >
                     <option>08:00 AM</option>
                     <option>10:00 AM</option>
@@ -392,24 +392,28 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
                 <label className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-600 mb-1">
                   Your Name &amp; WhatsApp
                 </label>
-                <div className="flex items-center gap-2">
-                  <User className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                  <input
-                    type="text"
-                    placeholder="Full Name"
-                    value={customerName}
-                    onChange={(e) => setCustomerName(e.target.value)}
-                    className="w-1/2 bg-transparent text-xs font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-hidden"
-                  />
-                  <span className="text-slate-300">|</span>
-                  <Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                  <input
-                    type="text"
-                    placeholder="WhatsApp No."
-                    value={customerPhone}
-                    onChange={(e) => setCustomerPhone(e.target.value)}
-                    className="w-1/2 bg-transparent text-xs font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-hidden"
-                  />
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                  <div className="flex items-center gap-1.5 w-full sm:w-1/2">
+                    <User className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                    <input
+                      type="text"
+                      placeholder="Full Name"
+                      value={customerName}
+                      onChange={(e) => setCustomerName(e.target.value)}
+                      className="w-full bg-transparent text-base md:text-xs font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-hidden"
+                    />
+                  </div>
+                  <span className="hidden sm:inline text-slate-300">|</span>
+                  <div className="flex items-center gap-1.5 w-full sm:w-1/2">
+                    <Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                    <input
+                      type="text"
+                      placeholder="WhatsApp No."
+                      value={customerPhone}
+                      onChange={(e) => setCustomerPhone(e.target.value)}
+                      className="w-full bg-transparent text-base md:text-xs font-semibold text-slate-900 placeholder:text-slate-400 focus:outline-hidden"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -418,7 +422,7 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full h-full min-h-[52px] bg-[#10B981] hover:bg-[#059669] text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all transform active:scale-95 cursor-pointer px-4"
+                  className="w-full h-full min-h-[48px] md:min-h-[52px] bg-[#10B981] hover:bg-[#059669] text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all transform active:scale-95 cursor-pointer px-4"
                 >
                   {isSubmitting ? (
                     <>

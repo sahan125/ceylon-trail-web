@@ -58,7 +58,7 @@ export const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
     VEHICLE_PRICING_TABLES[0];
 
   return (
-    <section id="fleet" className="w-full py-16 bg-white border-b border-slate-100">
+    <section id="fleet" className="w-full py-12 md:py-16 bg-white border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
@@ -67,7 +67,7 @@ export const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
               <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
               PRISTINE JAPANESE LINEUP
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-950 tracking-tight">
+            <h2 className="text-2xl md:text-4xl font-black text-slate-950 tracking-tight">
               Our Verified Tourist Fleet
             </h2>
             <p className="mt-2 text-sm sm:text-base text-slate-600 max-w-2xl font-normal">
@@ -171,7 +171,7 @@ export const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
                 </div>
 
                 {/* Price and Action */}
-                <div className="flex items-end justify-between pt-1 gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between pt-1 gap-3">
                   <div>
                     <div className="flex items-baseline gap-1">
                       <span className="text-xl font-black text-slate-950 tracking-tight">
@@ -188,7 +188,7 @@ export const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
 
                   <button
                     onClick={() => onSelectCar(car)}
-                    className="bg-[#EA580C] hover:bg-[#C2410C] text-white px-3.5 py-1.5 rounded-lg font-bold text-xs uppercase tracking-wider shadow-xs hover:shadow-md transition-all active:scale-95 cursor-pointer shrink-0"
+                    className="w-full sm:w-auto min-h-[44px] bg-[#EA580C] hover:bg-[#C2410C] text-white px-3.5 py-1.5 rounded-lg font-bold text-xs uppercase tracking-wider shadow-xs hover:shadow-md transition-all active:scale-95 cursor-pointer shrink-0 flex items-center justify-center"
                   >
                     Rent Now
                   </button>
@@ -206,7 +206,7 @@ export const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
                 <Check className="w-3.5 h-3.5 text-emerald-600" />
                 GUARANTEED PACKAGE PRICING
               </div>
-              <h3 className="text-xl sm:text-3xl font-black text-slate-950 tracking-tight">
+              <h3 className="text-xl md:text-3xl font-black text-slate-950 tracking-tight">
                 Vehicle Package Pricing Tables
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 mt-1">
@@ -220,7 +220,7 @@ export const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
                 <button
                   key={cat}
                   onClick={() => setActivePricingTab(cat)}
-                  className={`px-4 py-2 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${
+                  className={`px-4 py-2 min-h-[44px] flex items-center justify-center rounded-lg text-xs font-extrabold transition-all cursor-pointer ${
                     activePricingTab === cat
                       ? "bg-slate-950 text-white shadow-xs"
                       : "text-slate-600 hover:text-slate-950"
@@ -288,7 +288,7 @@ export const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
                               tier.extraDayUSD
                             )
                           }
-                          className="inline-flex items-center gap-1.5 bg-[#10B981] hover:bg-[#059669] text-white px-3.5 py-1.5 rounded-lg font-bold text-[11px] uppercase tracking-wider shadow-2xs transition-all active:scale-95 cursor-pointer"
+                          className="inline-flex items-center justify-center min-h-[44px] gap-1.5 bg-[#10B981] hover:bg-[#059669] text-white px-3.5 py-1.5 rounded-lg font-bold text-[11px] uppercase tracking-wider shadow-2xs transition-all active:scale-95 cursor-pointer"
                         >
                           <MessageCircle className="w-3.5 h-3.5" />
                           <span>Reserve</span>

@@ -648,8 +648,8 @@ export const TourManagement: React.FC<TourManagementProps> = ({
 
       {/* Add / Edit Tour Modal Form */}
       {isFormModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl border border-slate-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-4 md:p-6 shadow-2xl border border-slate-200">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-orange-600">
@@ -663,7 +663,7 @@ export const TourManagement: React.FC<TourManagementProps> = ({
               </div>
               <button
                 onClick={() => setIsFormModalOpen(false)}
-                className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800 cursor-pointer"
+                className="w-10 h-10 md:w-8 md:h-8 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -671,8 +671,8 @@ export const TourManagement: React.FC<TourManagementProps> = ({
 
             <form onSubmit={handleSaveTour} className="space-y-4 pt-4">
               {/* Title & Duration */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="sm:col-span-2">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="md:col-span-2">
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
                     Tour Title *
                   </label>
@@ -682,7 +682,7 @@ export const TourManagement: React.FC<TourManagementProps> = ({
                     placeholder="e.g. Classic Lanka Explorer"
                     value={formTitle}
                     onChange={(e) => setFormTitle(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-hidden focus:border-orange-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-base md:text-xs font-semibold text-slate-900 focus:outline-hidden focus:border-orange-500"
                   />
                 </div>
                 <div>
@@ -695,13 +695,13 @@ export const TourManagement: React.FC<TourManagementProps> = ({
                     placeholder="e.g. 7 Days / 6 Nights"
                     value={formDuration}
                     onChange={(e) => setFormDuration(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-hidden focus:border-orange-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-base md:text-xs font-semibold text-slate-900 focus:outline-hidden focus:border-orange-500"
                   />
                 </div>
               </div>
 
               {/* Price & Image URL */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div>
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
                     Price (USD) *
@@ -713,10 +713,10 @@ export const TourManagement: React.FC<TourManagementProps> = ({
                     placeholder="490"
                     value={formPrice}
                     onChange={(e) => setFormPrice(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-hidden focus:border-orange-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-base md:text-xs font-semibold text-slate-900 focus:outline-hidden focus:border-orange-500"
                   />
                 </div>
-                <div className="sm:col-span-2">
+                <div className="md:col-span-2">
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
                     Banner Image URL *
                   </label>
@@ -726,7 +726,7 @@ export const TourManagement: React.FC<TourManagementProps> = ({
                     placeholder="/images/sigiriya.jpg or https://..."
                     value={formImageUrl}
                     onChange={(e) => setFormImageUrl(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-hidden focus:border-orange-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-base md:text-xs font-semibold text-slate-900 focus:outline-hidden focus:border-orange-500"
                   />
                 </div>
               </div>
@@ -779,7 +779,7 @@ export const TourManagement: React.FC<TourManagementProps> = ({
                       type="button"
                       disabled={isUploadingImage}
                       onClick={() => fileInputRef.current?.click()}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 shadow-xs transition-all cursor-pointer disabled:opacity-50 active:scale-95"
+                      className="inline-flex items-center justify-center min-h-[44px] gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 shadow-xs transition-all cursor-pointer disabled:opacity-50 active:scale-95"
                     >
                       {isUploadingImage ? (
                         <>
@@ -850,7 +850,7 @@ export const TourManagement: React.FC<TourManagementProps> = ({
                   placeholder="Negombo, Sigiriya, Kandy, Nuwara Eliya, Galle"
                   value={formRoute}
                   onChange={(e) => setFormRoute(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-hidden focus:border-orange-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-base md:text-xs font-semibold text-slate-900 focus:outline-hidden focus:border-orange-500"
                 />
               </div>
 
@@ -865,7 +865,7 @@ export const TourManagement: React.FC<TourManagementProps> = ({
                   placeholder="Describe the journey, destinations, and what travelers can look forward to..."
                   value={formDescription}
                   onChange={(e) => setFormDescription(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-900 focus:outline-hidden focus:border-orange-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-base md:text-xs font-medium text-slate-900 focus:outline-hidden focus:border-orange-500"
                 />
               </div>
 
@@ -879,7 +879,7 @@ export const TourManagement: React.FC<TourManagementProps> = ({
                   placeholder={`Climb Sigiriya Rock Fortress\nScenic train ride through tea country\nWildlife safari in Yala\nSunset at Galle Dutch Fort`}
                   value={formHighlights}
                   onChange={(e) => setFormHighlights(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-medium text-slate-900 focus:outline-hidden focus:border-orange-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-base md:text-xs font-mono font-medium text-slate-900 focus:outline-hidden focus:border-orange-500"
                 />
               </div>
 
@@ -893,16 +893,16 @@ export const TourManagement: React.FC<TourManagementProps> = ({
                   placeholder={`Private AC vehicle & dedicated driver\nFuel, expressway tolls & parking\nAirport pickup & drop-off\n24/7 Islandwide customer support`}
                   value={formInclusions}
                   onChange={(e) => setFormInclusions(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-medium text-slate-900 focus:outline-hidden focus:border-orange-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-base md:text-xs font-mono font-medium text-slate-900 focus:outline-hidden focus:border-orange-500"
                 />
               </div>
 
               {/* Actions */}
-              <div className="pt-3 border-t border-slate-100 flex gap-3">
+              <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
                 <button
                   type="submit"
                   disabled={submitting || isUploadingImage}
-                  className="flex-1 bg-[#EA580C] hover:bg-[#C2410C] text-white py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-md cursor-pointer disabled:opacity-50"
+                  className="w-full sm:flex-1 min-h-[44px] bg-[#EA580C] hover:bg-[#C2410C] text-white py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-md cursor-pointer disabled:opacity-50 flex items-center justify-center"
                 >
                   {isUploadingImage
                     ? "Uploading Image..."
@@ -915,7 +915,7 @@ export const TourManagement: React.FC<TourManagementProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsFormModalOpen(false)}
-                  className="px-5 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider cursor-pointer"
+                  className="w-full sm:w-auto min-h-[44px] px-5 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider cursor-pointer flex items-center justify-center"
                 >
                   Cancel
                 </button>

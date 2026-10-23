@@ -875,8 +875,8 @@ export default function AdminDashboardPage() {
 
       {/* Booking Details Modal */}
       {selectedBooking && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-4 md:p-6 shadow-2xl border border-slate-200 space-y-4">
             <div className="flex items-start justify-between pb-3 border-b border-slate-100">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
@@ -888,7 +888,7 @@ export default function AdminDashboardPage() {
               </div>
               <button
                 onClick={() => setSelectedBooking(null)}
-                className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800 cursor-pointer"
+                className="w-10 h-10 md:w-8 md:h-8 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -977,13 +977,13 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            <div className="pt-3 border-t border-slate-100 flex gap-2">
+            <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => {
                   handleUpdateStatus(selectedBooking.id, "Confirmed");
                   setSelectedBooking(null);
                 }}
-                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider cursor-pointer"
+                className="w-full sm:flex-1 min-h-[44px] bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider cursor-pointer flex items-center justify-center"
               >
                 Confirm Booking in Supabase
               </button>
@@ -992,7 +992,7 @@ export default function AdminDashboardPage() {
                   handleUpdateStatus(selectedBooking.id, "Cancelled");
                   setSelectedBooking(null);
                 }}
-                className="px-4 bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-700 border border-slate-200 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider cursor-pointer"
+                className="w-full sm:w-auto min-h-[44px] px-4 bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-700 border border-slate-200 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider cursor-pointer flex items-center justify-center"
               >
                 Cancel
               </button>
@@ -1003,15 +1003,15 @@ export default function AdminDashboardPage() {
 
       {/* Manual Add Booking Modal */}
       {isNewBookingModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl border border-slate-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-4 md:p-6 shadow-2xl border border-slate-200">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <h3 className="text-lg font-black text-slate-900 tracking-tight">
                 Create Reservation in Supabase
               </h3>
               <button
                 onClick={() => setIsNewBookingModalOpen(false)}
-                className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800 cursor-pointer"
+                className="w-10 h-10 md:w-8 md:h-8 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1028,11 +1028,11 @@ export default function AdminDashboardPage() {
                   placeholder="Tourist name"
                   value={newClientName}
                   onChange={(e) => setNewClientName(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-hidden focus:border-orange-500"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-base md:text-xs font-semibold text-slate-900 focus:outline-hidden focus:border-orange-500"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
                     Phone / WhatsApp
@@ -1043,7 +1043,7 @@ export default function AdminDashboardPage() {
                     placeholder="+94... or +44..."
                     value={newPhone}
                     onChange={(e) => setNewPhone(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-hidden focus:border-orange-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-base md:text-xs font-semibold text-slate-900 focus:outline-hidden focus:border-orange-500"
                   />
                 </div>
                 <div>
@@ -1055,7 +1055,7 @@ export default function AdminDashboardPage() {
                     placeholder="client@email.com"
                     value={newEmail}
                     onChange={(e) => setNewEmail(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-hidden focus:border-orange-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-base md:text-xs font-semibold text-slate-900 focus:outline-hidden focus:border-orange-500"
                   />
                 </div>
               </div>
@@ -1067,7 +1067,7 @@ export default function AdminDashboardPage() {
                 <select
                   value={newCarId}
                   onChange={(e) => setNewCarId(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-hidden cursor-pointer"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-base md:text-xs font-semibold text-slate-900 focus:outline-hidden cursor-pointer"
                 >
                   {VEHICLES.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -1077,7 +1077,7 @@ export default function AdminDashboardPage() {
                 </select>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
                     Pickup Date
@@ -1087,7 +1087,7 @@ export default function AdminDashboardPage() {
                     required
                     value={newPickupDate}
                     onChange={(e) => setNewPickupDate(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-base md:text-xs font-semibold text-slate-900"
                   />
                 </div>
                 <div>
@@ -1099,7 +1099,7 @@ export default function AdminDashboardPage() {
                     required
                     value={newReturnDate}
                     onChange={(e) => setNewReturnDate(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-base md:text-xs font-semibold text-slate-900"
                   />
                 </div>
               </div>
@@ -1112,7 +1112,7 @@ export default function AdminDashboardPage() {
                   type="text"
                   value={newLocation}
                   onChange={(e) => setNewLocation(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-base md:text-xs font-semibold text-slate-900"
                 />
               </div>
 
@@ -1135,21 +1135,21 @@ export default function AdminDashboardPage() {
                   placeholder="Notes, flight number, payment arrangement..."
                   value={newNotes}
                   onChange={(e) => setNewNotes(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-900 focus:outline-hidden"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-base md:text-xs font-medium text-slate-900 focus:outline-hidden"
                 />
               </div>
 
-              <div className="pt-2 flex gap-3">
+              <div className="pt-2 flex flex-col sm:flex-row gap-3">
                 <button
                   type="submit"
-                  className="flex-1 bg-[#EA580C] hover:bg-[#C2410C] text-white py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-md cursor-pointer"
+                  className="w-full sm:flex-1 min-h-[44px] bg-[#EA580C] hover:bg-[#C2410C] text-white py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-md cursor-pointer flex items-center justify-center"
                 >
                   Save to Supabase
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsNewBookingModalOpen(false)}
-                  className="px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider cursor-pointer"
+                  className="w-full sm:w-auto min-h-[44px] px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider cursor-pointer flex items-center justify-center"
                 >
                   Close
                 </button>

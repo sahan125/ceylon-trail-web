@@ -70,12 +70,12 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-white overflow-x-hidden">
       {/* Site Header */}
       <Header onOpenQuoteModal={handleOpenQuote} />
 
       {/* Main Content Area */}
-      <main className="flex-1">
+      <main className="flex-1 overflow-x-hidden">
         {/* 1. Hero Section with Search Bar */}
         <Hero onSearchFleet={handleSearchFleet} />
 

@@ -21,7 +21,7 @@ export const Features: React.FC<FeaturesProps> = ({
   onOpenAirportInfo,
 }) => {
   return (
-    <section id="services" className="w-full py-16 bg-[#F8FAFC] border-b border-slate-100">
+    <section id="services" className="w-full py-12 md:py-16 bg-[#F8FAFC] border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header & WhatsApp Floating Pill */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-6">
@@ -31,7 +31,7 @@ export const Features: React.FC<FeaturesProps> = ({
               PEACE OF MIND ASSURED
             </div>
 
-            <h2 className="text-2xl sm:text-4xl font-black text-slate-950 tracking-tight">
+            <h2 className="text-2xl md:text-4xl font-black text-slate-950 tracking-tight">
               Designed Explicitly for International Travelers
             </h2>
 
@@ -46,7 +46,7 @@ export const Features: React.FC<FeaturesProps> = ({
             href="https://wa.me/94714877742"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-[#10B981] hover:bg-[#059669] text-white px-5 py-3 rounded-full font-bold text-xs shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 shrink-0"
+            className="inline-flex items-center justify-center gap-3 bg-[#10B981] hover:bg-[#059669] text-white px-5 py-3 rounded-full font-bold text-xs shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 shrink-0 w-full sm:w-auto min-h-[44px]"
           >
             <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
               <MessageCircle className="w-4 h-4 fill-white" />
@@ -82,7 +82,7 @@ export const Features: React.FC<FeaturesProps> = ({
             <div className="mt-6 pt-4 border-t border-slate-100">
               <button
                 onClick={onOpenPermitModal}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-emerald-600 transition-colors cursor-pointer group-hover:translate-x-1 duration-200"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-emerald-600 transition-colors cursor-pointer group-hover:translate-x-1 duration-200 min-h-[44px]"
               >
                 <span>IDP / AAC CERTIFIED</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -109,7 +109,7 @@ export const Features: React.FC<FeaturesProps> = ({
             <div className="mt-6 pt-4 border-t border-slate-100">
               <button
                 onClick={onOpenEmergencyInfo}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-indigo-600 transition-colors cursor-pointer group-hover:translate-x-1 duration-200"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-indigo-600 transition-colors cursor-pointer group-hover:translate-x-1 duration-200 min-h-[44px]"
               >
                 <span>INSTANT REPLACEMENT CAR</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -135,7 +135,7 @@ export const Features: React.FC<FeaturesProps> = ({
             <div className="mt-6 pt-4 border-t border-slate-100">
               <button
                 onClick={onOpenAirportInfo}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-sky-600 transition-colors cursor-pointer group-hover:translate-x-1 duration-200"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-sky-600 transition-colors cursor-pointer group-hover:translate-x-1 duration-200 min-h-[44px]"
               >
                 <span>DIRECT CURBSIDE DRIVE-OFF</span>
                 <ArrowRight className="w-3.5 h-3.5" />
