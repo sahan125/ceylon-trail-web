@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Compass, ArrowRight, MapPin, Sparkles, Loader2, MessageCircle } from "lucide-react";
+import { Compass, ArrowRight, MapPin, Sparkles, Loader2, MessageCircle, Navigation } from "lucide-react";
 import { TourPackage, normalizeTourPackage } from "@/types/tour";
 import { supabase } from "@/lib/supabase";
 import { SEED_TOURS } from "@/data/toursData";
@@ -132,6 +132,12 @@ export const Tours: React.FC<ToursProps> = ({
                   {tour.duration}
                 </div>
 
+                {/* Interactive Route Map Badge */}
+                <div className="absolute top-3.5 right-3.5 bg-white/95 backdrop-blur-md text-slate-900 text-[10.5px] font-extrabold px-2.5 py-1 rounded-full border border-slate-200/90 shadow-xs flex items-center gap-1.5">
+                  <Navigation className="w-3 h-3 text-orange-600" />
+                  <span>Route Map</span>
+                </div>
+
                 {/* Route String Banner at bottom of image */}
                 <div className="absolute bottom-3 left-3 right-3 flex items-center gap-1.5 text-white text-[11px] font-medium truncate">
                   <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
@@ -154,13 +160,14 @@ export const Tours: React.FC<ToursProps> = ({
                 <div className="pt-4 border-t border-slate-100">
                   <button
                     onClick={() => onSelectTour(tour)}
-                    className={`w-full py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-xs cursor-pointer text-center ${
+                    className={`w-full py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-xs cursor-pointer text-center flex items-center justify-center gap-2 ${
                       idx === 2 || tour.buttonColor === "orange"
                         ? "bg-[#EA580C] hover:bg-[#C2410C] text-white hover:shadow-md"
                         : "bg-[#08101E] hover:bg-slate-800 text-white hover:shadow-md"
                     }`}
                   >
-                    Details &amp; Route
+                    <Navigation className="w-3.5 h-3.5" />
+                    <span>View Itinerary &amp; Route Map</span>
                   </button>
                 </div>
               </div>

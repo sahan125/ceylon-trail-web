@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { X, Check, MapPin, Calendar, Users, Shield, MessageCircle, Sparkles } from "lucide-react";
 import { TourPackage } from "@/types/tour";
+import { TourRouteMap } from "@/components/TourRouteMap";
 
 interface TourModalProps {
   isOpen: boolean;
@@ -90,13 +91,19 @@ export const TourModal: React.FC<TourModalProps> = ({ isOpen, onClose, tour }) =
 
         {/* Modal Body */}
         <div className="p-6 space-y-6">
-          <div>
-            <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900 mb-2">
-              Tour Overview
-            </h4>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
-              {tour.description}
-            </p>
+          {/* Tour Overview Section */}
+          <div className="space-y-4">
+            <div>
+              <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900 mb-2">
+                Tour Overview
+              </h4>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                {tour.description}
+              </p>
+            </div>
+
+            {/* Interactive Tour Route Map (Leaflet.js + OpenStreetMap) */}
+            <TourRouteMap tour={tour} />
           </div>
 
           {/* Key Highlights */}
