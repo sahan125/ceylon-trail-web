@@ -205,6 +205,29 @@ export const VEHICLES: Vehicle[] = [
   },
 ];
 
+export function getVehicleStartingPrice(car: Vehicle): {
+  price: number;
+  formatted: string;
+  unit: string;
+} {
+  if (car.pricingCategory) {
+    const table = VEHICLE_PRICING_TABLES.find((p) => p.category === car.pricingCategory);
+    if (table && table.tiers.length > 0) {
+      const minTier = table.tiers[0];
+      return {
+        price: minTier.priceUSD,
+        formatted: `$${minTier.priceUSD.toFixed(2)} USD`,
+        unit: car.priceUnit || `${minTier.days} Days (No limit) • $${minTier.extraDayUSD}/extra day`,
+      };
+    }
+  }
+  return {
+    price: car.price,
+    formatted: `$${car.price.toFixed(2)} USD`,
+    unit: car.priceUnit,
+  };
+}
+
 export function calculateModelPrice(
   pricingCategory: "Wagon" | "Hatchback" | "Sedan" | undefined,
   days: number,

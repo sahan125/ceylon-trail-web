@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Star, Users, Luggage, Wind, Cog, Check, ArrowRight, MessageCircle } from "lucide-react";
-import { VEHICLES, Vehicle, VEHICLE_PRICING_TABLES } from "@/data/mockData";
+import { VEHICLES, Vehicle, VEHICLE_PRICING_TABLES, getVehicleStartingPrice } from "@/data/mockData";
 
 interface FleetProps {
   onSelectCar: (car: Vehicle) => void;
@@ -95,107 +95,113 @@ export const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
 
         {/* Fleet Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-          {filteredVehicles.map((car) => (
-            <div
-              key={car.id}
-              className="bg-white rounded-2xl border border-slate-200 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden group"
-            >
-              {/* Image & Badges Container */}
-              <div className="relative w-full h-44 bg-[#F1F5F9] p-4 flex items-center justify-center overflow-hidden">
-                {/* Top Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span
-                    className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md shadow-xs ${getBadgeStyle(
-                      car.badgeType
-                    )}`}
-                  >
-                    {car.badge}
-                  </span>
-                </div>
-
-                {/* Car Image with hover zoom */}
-                <div className="relative w-full h-full flex items-center justify-center">
-                  <Image
-                    src={car.image}
-                    alt={car.name}
-                    width={400}
-                    height={240}
-                    className="object-contain max-h-32 group-hover:scale-105 transition-transform duration-300 drop-shadow-md"
-                  />
-                </div>
-
-                {/* Bottom Metric Tag on image */}
-                <div className="absolute bottom-2.5 right-3 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded text-[10.5px] font-bold text-slate-800 shadow-2xs border border-slate-200/60">
-                  {car.metric}
-                </div>
-              </div>
-
-              {/* Card Body */}
-              <div className="p-4 flex-1 flex flex-col justify-between">
-                <div>
-                  {/* Category & Rating */}
-                  <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="font-extrabold uppercase tracking-wider text-slate-400 text-[10px]">
-                      {car.category}
+          {filteredVehicles.map((car) => {
+            const startingInfo = getVehicleStartingPrice(car);
+            return (
+              <div
+                key={car.id}
+                className="bg-white rounded-2xl border border-slate-200 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden group"
+              >
+                {/* Image & Badges Container */}
+                <div className="relative w-full h-44 bg-[#F1F5F9] p-4 flex items-center justify-center overflow-hidden">
+                  {/* Top Badge */}
+                  <div className="absolute top-3 left-3 z-10">
+                    <span
+                      className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md shadow-xs ${getBadgeStyle(
+                        car.badgeType
+                      )}`}
+                    >
+                      {car.badge}
                     </span>
-                    <div className="flex items-center gap-1 font-bold text-slate-800 text-xs">
-                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      <span>{car.rating}</span>
-                    </div>
                   </div>
 
-                  {/* Car Name */}
-                  <h3 className="text-sm font-extrabold text-slate-900 tracking-tight mb-3">
-                    {car.name}
-                  </h3>
+                  {/* Car Image with hover zoom */}
+                  <div className="relative w-full h-full flex items-center justify-center">
+                    <Image
+                      src={car.image}
+                      alt={car.name}
+                      width={400}
+                      height={240}
+                      className="object-contain max-h-32 group-hover:scale-105 transition-transform duration-300 drop-shadow-md"
+                    />
+                  </div>
 
-                  {/* Specs 2x2 Grid */}
-                  <div className="grid grid-cols-2 gap-y-2 gap-x-2 text-[11px] font-semibold text-slate-600 mb-4 pb-3 border-b border-slate-100">
-                    <div className="flex items-center gap-1.5">
-                      <Users className="w-3 h-3 text-slate-500 shrink-0" />
-                      <span>{car.specs.seats}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Cog className="w-3 h-3 text-slate-500 shrink-0" />
-                      <span>{car.specs.transmission}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Luggage className="w-3 h-3 text-slate-500 shrink-0" />
-                      <span>{car.specs.luggage}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Wind className="w-3 h-3 text-slate-500 shrink-0" />
-                      <span>{car.specs.ac}</span>
-                    </div>
+                  {/* Bottom Metric Tag on image */}
+                  <div className="absolute bottom-2.5 right-3 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded text-[10.5px] font-bold text-slate-800 shadow-2xs border border-slate-200/60">
+                    {car.metric}
                   </div>
                 </div>
 
-                {/* Price and Action */}
-                <div className="flex flex-col sm:flex-row sm:items-end justify-between pt-1 gap-3">
+                {/* Card Body */}
+                <div className="p-4 flex-1 flex flex-col justify-between">
                   <div>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-xl font-black text-slate-950 tracking-tight">
-                        ${car.price}
+                    {/* Category & Rating */}
+                    <div className="flex items-center justify-between text-xs mb-1">
+                      <span className="font-extrabold uppercase tracking-wider text-slate-400 text-[10px]">
+                        {car.category}
                       </span>
-                      <span className="text-[10px] text-slate-500 font-bold uppercase">
-                        USD
-                      </span>
+                      <div className="flex items-center gap-1 font-bold text-slate-800 text-xs">
+                        <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                        <span>{car.rating}</span>
+                      </div>
                     </div>
-                    <span className="text-[9.5px] text-emerald-700 font-bold block -mt-0.5">
-                      {car.priceUnit}
-                    </span>
+
+                    {/* Car Name */}
+                    <h3 className="text-sm font-extrabold text-slate-900 tracking-tight mb-3">
+                      {car.name}
+                    </h3>
+
+                    {/* Specs 2x2 Grid */}
+                    <div className="grid grid-cols-2 gap-y-2 gap-x-2 text-[11px] font-semibold text-slate-600 mb-4 pb-3 border-b border-slate-100">
+                      <div className="flex items-center gap-1.5">
+                        <Users className="w-3 h-3 text-slate-500 shrink-0" />
+                        <span>{car.specs.seats}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Cog className="w-3 h-3 text-slate-500 shrink-0" />
+                        <span>{car.specs.transmission}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Luggage className="w-3 h-3 text-slate-500 shrink-0" />
+                        <span>{car.specs.luggage}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Wind className="w-3 h-3 text-slate-500 shrink-0" />
+                        <span>{car.specs.ac}</span>
+                      </div>
+                    </div>
                   </div>
 
-                  <button
-                    onClick={() => onSelectCar(car)}
-                    className="w-full sm:w-auto min-h-[44px] bg-[#EA580C] hover:bg-[#C2410C] text-white px-3.5 py-1.5 rounded-lg font-bold text-xs uppercase tracking-wider shadow-xs hover:shadow-md transition-all active:scale-95 cursor-pointer shrink-0 flex items-center justify-center"
-                  >
-                    Rent Now
-                  </button>
+                  {/* Price and Action */}
+                  <div className="flex flex-col sm:flex-row sm:items-end justify-between pt-1 gap-3">
+                    <div>
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                        Starts at
+                      </span>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-xl font-black text-slate-950 tracking-tight">
+                          ${startingInfo.price.toFixed(2)}
+                        </span>
+                        <span className="text-[10px] text-slate-500 font-bold uppercase">
+                          USD
+                        </span>
+                      </div>
+                      <span className="text-[9.5px] text-emerald-700 font-bold block -mt-0.5">
+                        {startingInfo.unit}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => onSelectCar(car)}
+                      className="w-full sm:w-auto min-h-[44px] bg-[#EA580C] hover:bg-[#C2410C] text-white px-3.5 py-1.5 rounded-lg font-bold text-xs uppercase tracking-wider shadow-xs hover:shadow-md transition-all active:scale-95 cursor-pointer shrink-0 flex items-center justify-center"
+                    >
+                      Rent Now
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Section: Tiered Pricing Tables */}

@@ -16,7 +16,7 @@ import {
   Phone,
   User,
 } from "lucide-react";
-import { VEHICLES } from "@/data/mockData";
+import { VEHICLES, getVehicleStartingPrice } from "@/data/mockData";
 import { supabase } from "@/lib/supabase";
 
 interface HeroProps {
@@ -311,11 +311,14 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
                     onChange={(e) => setSelectedVehicleId(e.target.value)}
                     className="w-full bg-transparent text-base md:text-xs sm:text-sm font-semibold text-slate-900 focus:outline-hidden cursor-pointer"
                   >
-                    {VEHICLES.map((v) => (
-                      <option key={v.id} value={v.id}>
-                        {v.name} ({v.category}) — ${v.price} USD ({v.priceUnit})
-                      </option>
-                    ))}
+                    {VEHICLES.map((v) => {
+                      const starting = getVehicleStartingPrice(v);
+                      return (
+                        <option key={v.id} value={v.id}>
+                          {v.name} ({v.category}) — Starts at {starting.formatted} ({starting.unit})
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
               </div>

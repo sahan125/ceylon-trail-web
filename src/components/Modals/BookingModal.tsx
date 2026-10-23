@@ -464,7 +464,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     Current Duration: <strong className="text-slate-950 font-black">{daysDiff} Days</strong> ({pickupDate} to {returnDate})
                   </span>
                   <span className="text-orange-700 font-extrabold">
-                    Base: {priceCalculation.breakdown} = ${baseRate} USD
+                    Base: {priceCalculation.breakdown} = ${baseRate.toFixed(2)} USD
                   </span>
                 </div>
               </div>
@@ -488,7 +488,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     <span className="text-[11px] text-slate-500">Includes comprehensive tourist insurance &amp; 0 km limit</span>
                   </div>
                   <div className="text-right">
-                    <span className="text-base font-black text-slate-950">${currentCar.price} USD</span>
+                    <span className="text-base font-black text-slate-950">${currentCar.price.toFixed(2)} USD</span>
                     <span className="text-[10px] text-slate-500 block">/ day</span>
                   </div>
                 </div>

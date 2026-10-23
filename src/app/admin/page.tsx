@@ -32,7 +32,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { Booking, BookingStatus, BookingStats } from "@/types/booking";
-import { VEHICLES, calculateModelPrice } from "@/data/mockData";
+import { VEHICLES, calculateModelPrice, getVehicleStartingPrice } from "@/data/mockData";
 import { supabase } from "@/lib/supabase";
 import { TourManagement } from "@/components/Admin/TourManagement";
 
@@ -1069,11 +1069,14 @@ export default function AdminDashboardPage() {
                   onChange={(e) => setNewCarId(e.target.value)}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-base md:text-xs font-semibold text-slate-900 focus:outline-hidden cursor-pointer"
                 >
-                  {VEHICLES.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name} (${c.price} USD • {c.priceUnit})
-                    </option>
-                  ))}
+                  {VEHICLES.map((c) => {
+                    const starting = getVehicleStartingPrice(c);
+                    return (
+                      <option key={c.id} value={c.id}>
+                        {c.name} (Starts at {starting.formatted} • {starting.unit})
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
 
