@@ -101,9 +101,9 @@ export const Features: React.FC<FeaturesProps> = ({
               </h3>
               <p className="text-xs text-slate-600 leading-relaxed font-normal">
                 Travel with total peace of mind across Sri Lanka. We are always ready to help! If you face
-                any vehicle mechanical issues, road obstacles, or local strikes and public troubles
-                (වර්ජන කරදර), our friendly emergency response team is just a call away with instant
-                on-site assistance and vehicle replacement.
+                any vehicle mechanical issues, road obstacles, or local strikes and public troubles,
+                our friendly emergency response team is just a call away with instant on-site assistance
+                and vehicle replacement.
               </p>
             </div>
             <div className="mt-6 pt-4 border-t border-slate-100">

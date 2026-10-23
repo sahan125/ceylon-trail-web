@@ -39,7 +39,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, type }) =
               <li className="flex items-start gap-2">
                 <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                 <span>
-                  <strong>Strikes &amp; Public Obstacles (වර්ජන කරදර):</strong> If local strikes, roadblocks, or unexpected area troubles arise, our team guides you with alternative safe routing, local coordination, and complete on-ground support.
+                  <strong>Strikes &amp; Public Obstacles:</strong> If local strikes, roadblocks, or unexpected area troubles arise, our team guides you with alternative safe routing, local coordination, and complete on-ground support.
                 </span>
               </li>
               <li className="flex items-start gap-2">
