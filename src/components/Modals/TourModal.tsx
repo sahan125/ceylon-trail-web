@@ -47,7 +47,6 @@ export const TourModal: React.FC<TourModalProps> = ({ isOpen, onClose, tour }) =
       `🧭 *Tour:* ${tour.title}%0A` +
       `⏱️ *Duration:* ${tour.duration}%0A` +
       `📍 *Route:* ${routeDisplay}%0A` +
-      `💰 *Price:* $${tour.price} ${tour.priceLabel || "/ Complete Group"}%0A` +
       `Please check available dates and vehicle options for my travel group.`;
 
     window.open(`https://wa.me/94714877742?text=${msg}`, "_blank");
@@ -138,26 +137,23 @@ export const TourModal: React.FC<TourModalProps> = ({ isOpen, onClose, tour }) =
             </div>
           </div>
 
-          {/* Price & CTA */}
-          <div className="pt-2 flex items-center justify-between border-t border-slate-100">
+          {/* Action & Inquire */}
+          <div className="pt-2 flex items-center justify-between border-t border-slate-100 gap-4">
             <div>
               <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
-                Total Package Price
+                Itinerary Pricing
               </span>
-              <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-black text-slate-950">${tour.price}</span>
-                <span className="text-xs text-slate-500 font-semibold">
-                  {tour.priceLabel || "/ Complete Group"}
-                </span>
-              </div>
+              <span className="text-sm font-bold text-slate-900">
+                Custom Quote on Request
+              </span>
             </div>
 
             <button
               onClick={handleBookTour}
-              className="bg-[#EA580C] hover:bg-[#C2410C] text-white px-6 py-3 rounded-full font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg hover:shadow-xl transition-all cursor-pointer"
+              className="bg-[#EA580C] hover:bg-[#C2410C] text-white px-6 py-3 rounded-full font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg hover:shadow-xl transition-all cursor-pointer shrink-0"
             >
               <MessageCircle className="w-4 h-4" />
-              <span>Book via WhatsApp</span>
+              <span>Inquire via WhatsApp</span>
             </button>
           </div>
         </div>

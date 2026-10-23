@@ -150,18 +150,11 @@ export const Tours: React.FC<ToursProps> = ({
                   </p>
                 </div>
 
-                {/* Price and CTA */}
+                {/* Action CTA */}
                 <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                  <div>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-black text-slate-950 tracking-tight">
-                        ${tour.price}
-                      </span>
-                    </div>
-                    <span className="text-[10px] text-slate-500 font-bold block -mt-0.5">
-                      {tour.priceLabel || "/ Complete Group"}
-                    </span>
-                  </div>
+                  <span className="text-xs font-semibold text-slate-500">
+                    Custom Quote on Request
+                  </span>
 
                   <button
                     onClick={() => onSelectTour(tour)}
