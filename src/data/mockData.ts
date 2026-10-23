@@ -50,6 +50,7 @@ export const VEHICLE_PRICING_TABLES: ModelPricingTable[] = [
 export interface Vehicle {
   id: string;
   name: string;
+  description?: string;
   badge: string;
   badgeType: "green" | "blue" | "orange" | "slate";
   metric: string;
@@ -63,6 +64,7 @@ export interface Vehicle {
     luggage: string;
     ac: string;
   };
+  fuelEfficiency?: string;
   price: number;
   priceUnit: string;
   pricingCategory?: "Wagon" | "Hatchback" | "Sedan";
@@ -140,21 +142,23 @@ export const VEHICLES: Vehicle[] = [
     extraDayUSD: 55,
   },
   {
-    id: "axio-hybrid",
-    name: "Toyota Axio Hybrid",
+    id: "toyota-bezza",
+    name: "Toyota Bezza (Perodua Bezza)",
+    description: "A compact 4-door sedan",
     badge: "TOURIST'S CHOICE",
     badgeType: "blue",
-    metric: "⛽ 19 km/L",
-    category: "SEDAN CAR MODEL",
+    metric: "⛽ 21 – 22.8 km/L",
+    category: "COMPACT 4-DOOR SEDAN",
     rating: 4.9,
     type: "Sedans",
     image: "/images/axio-sedan-fleet.png",
     specs: {
       seats: "5 Seats",
-      transmission: "Automatic",
-      luggage: "3 Large Bags",
+      transmission: "Automatic (or Manual depending on the specific variant)",
+      luggage: "Massive 508 Litres boot space (fits multiple large bags/suitcases easily)",
       ac: "Full A/C",
     },
+    fuelEfficiency: "Promotional/Claimed: 21 – 22.8 km/L",
     price: 300,
     priceUnit: "5 Days (No limit) • $60/extra day",
     pricingCategory: "Sedan",
