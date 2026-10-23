@@ -77,7 +77,7 @@ export function normalizeTourPackage(item: any): TourPackage {
     }
   }
 
-  const image = item.image_url || item.image || "/images/sigiriya.jpg";
+  const image = item.image_url || item.image || "/images/sigiriya.png";
 
   return {
     id: String(item.id),

@@ -120,7 +120,7 @@ export const Tours: React.FC<ToursProps> = ({
               {/* Image & Route Overlay Container */}
               <div className="relative w-full h-56 overflow-hidden bg-slate-100">
                 <Image
-                  src={tour.image || tour.image_url || "/images/sigiriya.jpg"}
+                  src={tour.image || tour.image_url || "/images/sigiriya.png"}
                   alt={tour.title}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"

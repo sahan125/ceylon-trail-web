@@ -34,10 +34,10 @@ interface TourManagementProps {
 }
 
 const PRESET_IMAGES = [
-  { label: "Sigiriya Rock", url: "/images/sigiriya.jpg" },
-  { label: "Ella Nine Arch", url: "/images/ella-bridge.jpg" },
-  { label: "Mirissa Coast", url: "/images/mirissa-beach.jpg" },
-  { label: "Island Scenic", url: "/images/hero-bg.jpg" },
+  { label: "Sigiriya Rock", url: "/images/sigiriya.png" },
+  { label: "Ella Nine Arch", url: "/images/ella-bridge.png" },
+  { label: "Mirissa Coast", url: "/images/mirissa-beach.png" },
+  { label: "Island Scenic", url: "/images/hero-bg.png" },
 ];
 
 export const TourManagement: React.FC<TourManagementProps> = ({
@@ -65,7 +65,7 @@ export const TourManagement: React.FC<TourManagementProps> = ({
   const [formDuration, setFormDuration] = useState("");
   const [formRoute, setFormRoute] = useState("");
   const [formPrice, setFormPrice] = useState<number | string>(490);
-  const [formImageUrl, setFormImageUrl] = useState("/images/sigiriya.jpg");
+  const [formImageUrl, setFormImageUrl] = useState("/images/sigiriya.png");
   const [formDescription, setFormDescription] = useState("");
   const [formHighlights, setFormHighlights] = useState("");
   const [formInclusions, setFormInclusions] = useState("");

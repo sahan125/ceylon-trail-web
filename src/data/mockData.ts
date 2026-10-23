@@ -293,7 +293,7 @@ export const TOUR_PACKAGES: TourPackage[] = [
       "The quintessential first-timer circuit. UNESCO cultural triangle, sacred Kandy relics, misty high-elevation tea plantations, down to southern colonial fortress.",
     price: 490,
     priceLabel: "/ Complete Group",
-    image: "/images/sigiriya.jpg",
+    image: "/images/sigiriya.png",
     buttonColor: "navy",
     highlights: [
       "Sigiriya Rock Fortress sunrise climb",
@@ -313,7 +313,7 @@ export const TOUR_PACKAGES: TourPackage[] = [
       "Traverse panoramic waterfalls, cool temperate mountain towns, historic British colonial bungalows, and scenic hikes through rolling Ceylon tea valleys.",
     price: 280,
     priceLabel: "/ Complete Group",
-    image: "/images/ella-bridge.jpg",
+    image: "/images/ella-bridge.png",
     buttonColor: "navy",
     highlights: [
       "Famous Demodara Nine Arch Bridge in Ella",
@@ -332,7 +332,7 @@ export const TOUR_PACKAGES: TourPackage[] = [
       "The definitive comprehensive expedition. From northern ancient kingdoms to Eastern secluded surf beaches, wild leopard safaris in Yala, and coastal drives back to BIA Airport.",
     price: 720,
     priceLabel: "/ Complete Group",
-    image: "/images/mirissa-beach.jpg",
+    image: "/images/mirissa-beach.png",
     featured: true,
     buttonColor: "orange",
     highlights: [

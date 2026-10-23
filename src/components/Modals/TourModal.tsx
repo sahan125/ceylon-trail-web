@@ -59,7 +59,7 @@ export const TourModal: React.FC<TourModalProps> = ({ isOpen, onClose, tour }) =
         {/* Tour Image Header */}
         <div className="relative w-full h-64 bg-slate-900">
           <Image
-            src={tour.image || tour.image_url || "/images/sigiriya.jpg"}
+            src={tour.image || tour.image_url || "/images/sigiriya.png"}
             alt={tour.title}
             fill
             className="object-cover"

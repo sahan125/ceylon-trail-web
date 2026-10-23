@@ -165,7 +165,7 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
       {/* Background Hero Image with Gradients */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/hero-bg.jpg"
+          src="/images/hero-bg.png"
           alt="Sri Lanka scenic mountains and tea country"
           fill
           priority

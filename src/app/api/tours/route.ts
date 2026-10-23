@@ -51,7 +51,7 @@ export async function POST(request: Request) {
       route_locations: typeof route_locations === "string" ? route_locations : (route_locations || []).join(", "),
       description,
       price: Number(price) || 0,
-      image_url: image_url || "/images/sigiriya.jpg",
+      image_url: image_url || "/images/sigiriya.png",
       highlights: Array.isArray(highlights) ? highlights : [],
       inclusions: Array.isArray(inclusions) && inclusions.length > 0
         ? inclusions
