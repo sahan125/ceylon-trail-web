@@ -20,7 +20,6 @@ import {
   Wind,
   Cog,
   CheckCircle2,
-  Gauge,
 } from "lucide-react";
 import {
   VEHICLES,
@@ -360,11 +359,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                   <h4 className="text-base sm:text-lg font-black tracking-tight text-white">
                     {currentCar.name}
                   </h4>
-                  {currentCar.description && (
-                    <p className="text-xs text-slate-400 font-medium mt-0.5">
-                      {currentCar.description}
-                    </p>
-                  )}
 
                   {/* Specs Badges */}
                   <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-[11px] text-slate-300 font-medium mt-1.5">
@@ -380,11 +374,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     <span className="inline-flex items-center gap-1 bg-slate-800/90 px-2 py-0.5 rounded">
                       <Wind className="w-3 h-3 text-slate-400" /> {currentCar.specs.ac}
                     </span>
-                    {currentCar.fuelEfficiency && (
-                      <span className="inline-flex items-center gap-1 bg-emerald-950/80 text-emerald-300 border border-emerald-800/60 px-2 py-0.5 rounded">
-                        <Gauge className="w-3 h-3 text-emerald-400" /> {currentCar.fuelEfficiency}
-                      </span>
-                    )}
                   </div>
                 </div>
               </div>
