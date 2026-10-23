@@ -284,7 +284,7 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
                   >
                     {VEHICLES.map((v) => (
                       <option key={v.id} value={v.id}>
-                        {v.name} ({v.category}) — ${v.price}/day
+                        {v.name} ({v.category}) — ${v.price} USD ({v.priceUnit})
                       </option>
                     ))}
                   </select>

@@ -66,6 +66,8 @@ export interface Vehicle {
   price: number;
   priceUnit: string;
   pricingCategory?: "Wagon" | "Hatchback" | "Sedan";
+  extraDayUSD?: number;
+  packageDays?: number;
 }
 
 export interface TourPackage {
@@ -109,9 +111,11 @@ export const VEHICLES: Vehicle[] = [
       luggage: "2 Bags",
       ac: "Full A/C",
     },
-    price: 25,
-    priceUnit: "Per day / Unlimited KM",
+    price: 250,
+    priceUnit: "5 Days (No limit) • $50/extra day",
     pricingCategory: "Wagon",
+    packageDays: 5,
+    extraDayUSD: 50,
   },
   {
     id: "hatchback-swift",
@@ -129,9 +133,11 @@ export const VEHICLES: Vehicle[] = [
       luggage: "2 Bags",
       ac: "Full A/C",
     },
-    price: 28,
-    priceUnit: "Per day / Unlimited KM",
+    price: 275,
+    priceUnit: "5 Days (No limit) • $55/extra day",
     pricingCategory: "Hatchback",
+    packageDays: 5,
+    extraDayUSD: 55,
   },
   {
     id: "axio-hybrid",
@@ -149,9 +155,11 @@ export const VEHICLES: Vehicle[] = [
       luggage: "3 Large Bags",
       ac: "Full A/C",
     },
-    price: 38,
-    priceUnit: "Per day / Unlimited KM",
+    price: 300,
+    priceUnit: "5 Days (No limit) • $60/extra day",
     pricingCategory: "Sedan",
+    packageDays: 5,
+    extraDayUSD: 60,
   },
   {
     id: "raize-turbo",
@@ -170,7 +178,9 @@ export const VEHICLES: Vehicle[] = [
       ac: "Full A/C",
     },
     price: 45,
-    priceUnit: "Per day / Unlimited KM",
+    priceUnit: "Per day • Unlimited KM",
+    packageDays: 1,
+    extraDayUSD: 45,
   },
   {
     id: "hiace-kdh",
@@ -189,9 +199,89 @@ export const VEHICLES: Vehicle[] = [
       ac: "Full A/C",
     },
     price: 65,
-    priceUnit: "Per day / Unlimited KM",
+    priceUnit: "Per day • Unlimited KM",
+    packageDays: 1,
+    extraDayUSD: 65,
   },
 ];
+
+export function calculateModelPrice(
+  pricingCategory: "Wagon" | "Hatchback" | "Sedan" | undefined,
+  days: number,
+  fallbackDailyRate: number
+): {
+  basePrice: number;
+  matchedTierLabel: string;
+  extraDays: number;
+  extraDayRate: number;
+  breakdown: string;
+} {
+  if (!pricingCategory) {
+    const total = days * fallbackDailyRate;
+    return {
+      basePrice: total,
+      matchedTierLabel: `${days} Days Daily Rate`,
+      extraDays: 0,
+      extraDayRate: fallbackDailyRate,
+      breakdown: `${days} days × $${fallbackDailyRate}/day`,
+    };
+  }
+
+  const table = VEHICLE_PRICING_TABLES.find((p) => p.category === pricingCategory);
+  if (!table || table.tiers.length === 0) {
+    const total = days * fallbackDailyRate;
+    return {
+      basePrice: total,
+      matchedTierLabel: `${days} Days Rate`,
+      extraDays: 0,
+      extraDayRate: fallbackDailyRate,
+      breakdown: `${days} days × $${fallbackDailyRate}/day`,
+    };
+  }
+
+  const sortedTiers = [...table.tiers].sort((a, b) => a.days - b.days);
+
+  // If days is less than or equal to first tier (typically 5 days)
+  if (days <= sortedTiers[0].days) {
+    const minTier = sortedTiers[0];
+    return {
+      basePrice: minTier.priceUSD,
+      matchedTierLabel: minTier.label,
+      extraDays: 0,
+      extraDayRate: minTier.extraDayUSD,
+      breakdown: `${minTier.label} ($${minTier.priceUSD})`,
+    };
+  }
+
+  // Find exact tier or highest lower tier
+  let matchedTier = sortedTiers[0];
+  for (let i = 0; i < sortedTiers.length; i++) {
+    if (sortedTiers[i].days === days) {
+      return {
+        basePrice: sortedTiers[i].priceUSD,
+        matchedTierLabel: sortedTiers[i].label,
+        extraDays: 0,
+        extraDayRate: sortedTiers[i].extraDayUSD,
+        breakdown: `${sortedTiers[i].label} ($${sortedTiers[i].priceUSD})`,
+      };
+    }
+    if (sortedTiers[i].days < days) {
+      matchedTier = sortedTiers[i];
+    }
+  }
+
+  const extraDays = days - matchedTier.days;
+  const extraPrice = extraDays * matchedTier.extraDayUSD;
+  const totalPrice = matchedTier.priceUSD + extraPrice;
+
+  return {
+    basePrice: totalPrice,
+    matchedTierLabel: matchedTier.label,
+    extraDays,
+    extraDayRate: matchedTier.extraDayUSD,
+    breakdown: `${matchedTier.days} Days base ($${matchedTier.priceUSD}) + ${extraDays} extra day(s) × $${matchedTier.extraDayUSD}`,
+  };
+}
 
 export const TOUR_PACKAGES: TourPackage[] = [
   {

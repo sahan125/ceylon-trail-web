@@ -171,21 +171,24 @@ export const Fleet: React.FC<FleetProps> = ({ onSelectCar }) => {
                 </div>
 
                 {/* Price and Action */}
-                <div className="flex items-end justify-between pt-1">
+                <div className="flex items-end justify-between pt-1 gap-2">
                   <div>
                     <div className="flex items-baseline gap-1">
                       <span className="text-xl font-black text-slate-950 tracking-tight">
                         ${car.price}
                       </span>
+                      <span className="text-[10px] text-slate-500 font-bold uppercase">
+                        USD
+                      </span>
                     </div>
-                    <span className="text-[9.5px] text-slate-500 font-bold block -mt-0.5">
+                    <span className="text-[9.5px] text-emerald-700 font-bold block -mt-0.5">
                       {car.priceUnit}
                     </span>
                   </div>
 
                   <button
                     onClick={() => onSelectCar(car)}
-                    className="bg-[#EA580C] hover:bg-[#C2410C] text-white px-3.5 py-1.5 rounded-lg font-bold text-xs uppercase tracking-wider shadow-xs hover:shadow-md transition-all active:scale-95 cursor-pointer"
+                    className="bg-[#EA580C] hover:bg-[#C2410C] text-white px-3.5 py-1.5 rounded-lg font-bold text-xs uppercase tracking-wider shadow-xs hover:shadow-md transition-all active:scale-95 cursor-pointer shrink-0"
                   >
                     Rent Now
                   </button>

@@ -31,7 +31,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { Booking, BookingStatus, BookingStats } from "@/types/booking";
-import { VEHICLES } from "@/data/mockData";
+import { VEHICLES, calculateModelPrice } from "@/data/mockData";
 import { supabase } from "@/lib/supabase";
 import { TourManagement } from "@/components/Admin/TourManagement";
 
@@ -254,9 +254,10 @@ export default function AdminDashboardPage() {
     const car = VEHICLES.find((v) => v.id === newCarId) || VEHICLES[0];
     const start = new Date(newPickupDate).getTime();
     const end = new Date(newReturnDate).getTime();
-    const days = Math.max(1, Math.round((end - start) / (1000 * 60 * 60 * 24))) || 6;
+    const days = Math.max(1, Math.round((end - start) / (1000 * 60 * 60 * 24))) || 5;
+    const priceCalc = calculateModelPrice(car.pricingCategory, days, car.price);
     const total =
-      car.price * days +
+      priceCalc.basePrice +
       (newRentalType === "chauffeur" ? 25 * days : 0) +
       (newAacPermit ? 40 : 0);
 
@@ -1063,7 +1064,7 @@ export default function AdminDashboardPage() {
                 >
                   {VEHICLES.map((c) => (
                     <option key={c.id} value={c.id}>
-                      {c.name} (${c.price}/day)
+                      {c.name} (${c.price} USD • {c.priceUnit})
                     </option>
                   ))}
                 </select>

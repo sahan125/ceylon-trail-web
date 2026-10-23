@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import {
   X,
   Check,
@@ -14,8 +15,17 @@ import {
   Clock,
   Sparkles,
   Loader2,
+  Users,
+  Luggage,
+  Wind,
+  Cog,
+  CheckCircle2,
 } from "lucide-react";
-import { VEHICLES } from "@/data/mockData";
+import {
+  VEHICLES,
+  VEHICLE_PRICING_TABLES,
+  calculateModelPrice,
+} from "@/data/mockData";
 import { supabase } from "@/lib/supabase";
 
 interface BookingModalProps {
@@ -36,7 +46,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const [location, setLocation] = useState("Bandaranaike Intl. Airport (BIA)");
   const [pickupDate, setPickupDate] = useState("2026-04-10");
   const [pickupTime, setPickupTime] = useState("10:00 AM");
-  const [returnDate, setReturnDate] = useState("2026-04-18");
+  const [returnDate, setReturnDate] = useState("2026-04-15");
   const [returnTime, setReturnTime] = useState("04:00 PM");
   const [fullName, setFullName] = useState("");
   const [whatsappNumber, setWhatsappNumber] = useState("");
@@ -57,15 +67,33 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
   const currentCar = VEHICLES.find((v) => v.id === carId) || VEHICLES[0];
 
+  const modelPricingTable = currentCar.pricingCategory
+    ? VEHICLE_PRICING_TABLES.find((p) => p.category === currentCar.pricingCategory)
+    : null;
+
   // Calculate rental days
   const start = new Date(pickupDate).getTime();
   const end = new Date(returnDate).getTime();
-  const daysDiff = Math.max(1, Math.round((end - start) / (1000 * 60 * 60 * 24))) || 8;
+  const calculatedDays = Math.round((end - start) / (1000 * 60 * 60 * 24));
+  const daysDiff = Math.max(1, isNaN(calculatedDays) || calculatedDays < 1 ? 5 : calculatedDays);
 
-  const baseRate = currentCar.price * daysDiff;
+  const priceCalculation = calculateModelPrice(
+    currentCar.pricingCategory,
+    daysDiff,
+    currentCar.price
+  );
+  const baseRate = priceCalculation.basePrice;
   const chauffeurFee = rentalType === "chauffeur" ? 25 * daysDiff : 0;
   const permitFee = needAacPermit ? 40 : 0;
   const total = baseRate + chauffeurFee + permitFee;
+
+  const handleSelectTierDays = (days: number) => {
+    const pDate = new Date(pickupDate);
+    if (!isNaN(pDate.getTime())) {
+      const rDate = new Date(pDate.getTime() + days * 24 * 60 * 60 * 1000);
+      setReturnDate(rDate.toISOString().split("T")[0]);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,7 +110,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               full_name: fullName,
               email: email || "Not provided",
               phone: whatsappNumber,
-              vehicle: currentCar.name,
+              vehicle: `${currentCar.name} (${currentCar.category})`,
               pickup_date: pickupDate,
               return_date: returnDate,
               pickup_location: location,
@@ -146,15 +174,16 @@ export const BookingModal: React.FC<BookingModalProps> = ({
         `📅 *Pickup Date/Time:* ${pickupDate} at ${pickupTime}%0A` +
         `🏁 *Return Date/Time:* ${returnDate} at ${returnTime}%0A` +
         `⏱️ *Duration:* ${daysDiff} Days%0A` +
+        `🏷️ *Pricing Package:* ${priceCalculation.matchedTierLabel} ($${baseRate} USD)%0A` +
         `📑 *AAC Driving Permit:* ${needAacPermit ? "Yes, please prepare endorsement" : "No, have international license"}%0A` +
-        `💰 *Estimated Total:* $${total}%0A%0A` +
+        `💰 *Estimated Total:* $${total} USD%0A%0A` +
         `👤 *Client Details:*%0A` +
         `- Name: ${fullName}%0A` +
         `- WhatsApp: ${whatsappNumber}%0A` +
         `- Email: ${email || "N/A"}` +
         (notes ? `%0A- Notes: ${notes}` : "");
 
-      // 3. Open WhatsApp link in new tab
+      // Open WhatsApp link in new tab
       setTimeout(() => {
         window.open(`https://wa.me/94714877742?text=${message}`, "_blank");
       }, 500);
@@ -300,23 +329,171 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               </div>
             </div>
 
-            {/* Vehicle Selection */}
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
-                Select Vehicle
-              </label>
-              <select
-                value={carId}
-                onChange={(e) => setCarId(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 cursor-pointer"
-              >
-                {VEHICLES.map((car) => (
-                  <option key={car.id} value={car.id}>
-                    {car.name} ({car.category}) — ${car.price}/day
-                  </option>
-                ))}
-              </select>
+            {/* Selected Vehicle Showcase (Vehicle Select Removed) */}
+            <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-2xl p-4 shadow-md border border-slate-800">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+                {/* Vehicle Thumbnail */}
+                <div className="relative w-32 h-20 bg-slate-800/80 rounded-xl p-2 shrink-0 flex items-center justify-center overflow-hidden border border-slate-700/50">
+                  <Image
+                    src={currentCar.image}
+                    alt={currentCar.name}
+                    width={140}
+                    height={90}
+                    className="object-contain max-h-16 drop-shadow-md"
+                  />
+                  <span className="absolute bottom-1 right-1 bg-black/70 text-[9px] font-bold text-amber-400 px-1.5 py-0.5 rounded">
+                    {currentCar.metric}
+                  </span>
+                </div>
+
+                {/* Vehicle Info */}
+                <div className="flex-1 text-center sm:text-left">
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-1.5 mb-1">
+                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-orange-600 text-white">
+                      {currentCar.category}
+                    </span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800/60">
+                      {currentCar.badge}
+                    </span>
+                  </div>
+                  <h4 className="text-base sm:text-lg font-black tracking-tight text-white">
+                    {currentCar.name}
+                  </h4>
+
+                  {/* Specs Badges */}
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-[11px] text-slate-300 font-medium mt-1.5">
+                    <span className="inline-flex items-center gap-1 bg-slate-800/90 px-2 py-0.5 rounded">
+                      <Users className="w-3 h-3 text-slate-400" /> {currentCar.specs.seats}
+                    </span>
+                    <span className="inline-flex items-center gap-1 bg-slate-800/90 px-2 py-0.5 rounded">
+                      <Cog className="w-3 h-3 text-slate-400" /> {currentCar.specs.transmission}
+                    </span>
+                    <span className="inline-flex items-center gap-1 bg-slate-800/90 px-2 py-0.5 rounded">
+                      <Luggage className="w-3 h-3 text-slate-400" /> {currentCar.specs.luggage}
+                    </span>
+                    <span className="inline-flex items-center gap-1 bg-slate-800/90 px-2 py-0.5 rounded">
+                      <Wind className="w-3 h-3 text-slate-400" /> {currentCar.specs.ac}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
+
+            {/* Model-Specific Pricing Table */}
+            {modelPricingTable ? (
+              <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                      <span className="text-xs font-black uppercase tracking-wider text-slate-900">
+                        {modelPricingTable.title}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 font-medium mt-0.5">
+                      Select a package plan or choose custom dates below. All plans have <strong>0 km limit (Unlimited KM)</strong>.
+                    </p>
+                  </div>
+                  <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-extrabold uppercase rounded bg-emerald-100 text-emerald-800 border border-emerald-300">
+                    Unlimited KM
+                  </span>
+                </div>
+
+                {/* Table / Tiers grid */}
+                <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-slate-100/80 text-slate-600 font-extrabold text-[10.5px] uppercase tracking-wider border-b border-slate-200">
+                      <tr>
+                        <th className="py-2.5 px-3">Package Plan</th>
+                        <th className="py-2.5 px-3">Duration</th>
+                        <th className="py-2.5 px-3">Total Price</th>
+                        <th className="py-2.5 px-3">Per Extra Day</th>
+                        <th className="py-2.5 px-3 text-right">Apply</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {modelPricingTable.tiers.map((tier) => {
+                        const isSelected = daysDiff === tier.days;
+                        return (
+                          <tr
+                            key={tier.days}
+                            onClick={() => handleSelectTierDays(tier.days)}
+                            className={`transition-colors cursor-pointer ${
+                              isSelected
+                                ? "bg-orange-50/80 font-bold"
+                                : "hover:bg-slate-50 text-slate-700"
+                            }`}
+                          >
+                            <td className="py-2 px-3 font-bold text-slate-900 flex items-center gap-1.5">
+                              {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-orange-600 shrink-0" />}
+                              <span>{tier.label}</span>
+                            </td>
+                            <td className="py-2 px-3 text-slate-600">{tier.days} Days</td>
+                            <td className="py-2 px-3 font-black text-slate-950 text-xs">
+                              ${tier.priceUSD.toFixed(2)} USD
+                            </td>
+                            <td className="py-2 px-3 text-slate-500">
+                              ${tier.extraDayUSD.toFixed(2)} USD
+                            </td>
+                            <td className="py-2 px-3 text-right">
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleSelectTierDays(tier.days);
+                                }}
+                                className={`px-2.5 py-1 rounded-md text-[10.5px] font-bold transition-all cursor-pointer ${
+                                  isSelected
+                                    ? "bg-orange-600 text-white shadow-2xs"
+                                    : "bg-slate-100 hover:bg-slate-200 text-slate-700"
+                                }`}
+                              >
+                                {isSelected ? "Active" : "Select"}
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Calculation summary banner */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between text-[11px] text-slate-600 bg-white p-2.5 rounded-lg border border-slate-200 gap-1">
+                  <span>
+                    Current Duration: <strong className="text-slate-950 font-black">{daysDiff} Days</strong> ({pickupDate} to {returnDate})
+                  </span>
+                  <span className="text-orange-700 font-extrabold">
+                    Base: {priceCalculation.breakdown} = ${baseRate} USD
+                  </span>
+                </div>
+              </div>
+            ) : (
+              /* Fallback for SUV/Van without tiered table */
+              <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <span className="text-xs font-black uppercase tracking-wider text-slate-900">
+                      {currentCar.name} Pricing
+                    </span>
+                  </div>
+                  <span className="px-2 py-0.5 text-[10px] font-extrabold uppercase rounded bg-emerald-100 text-emerald-800 border border-emerald-300">
+                    Unlimited KM
+                  </span>
+                </div>
+                <div className="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between">
+                  <div>
+                    <span className="text-xs font-bold text-slate-800 block">Standard Daily Rate</span>
+                    <span className="text-[11px] text-slate-500">Includes comprehensive tourist insurance &amp; 0 km limit</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-base font-black text-slate-950">${currentCar.price} USD</span>
+                    <span className="text-[10px] text-slate-500 block">/ day</span>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Pickup Location */}
             <div>
@@ -482,28 +659,30 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             {/* Pricing Breakdown Card */}
             <div className="bg-slate-900 text-white rounded-2xl p-4 space-y-2">
               <div className="flex justify-between text-xs text-slate-300">
-                <span>{currentCar.name} ({daysDiff} days × ${currentCar.price})</span>
-                <span className="font-semibold text-white">${baseRate}</span>
+                <span>
+                  {currentCar.name} ({daysDiff} Days • {priceCalculation.breakdown})
+                </span>
+                <span className="font-semibold text-white">${baseRate} USD</span>
               </div>
               {rentalType === "chauffeur" && (
                 <div className="flex justify-between text-xs text-slate-300">
                   <span>English-fluent Tourist Chauffeur (${25} × {daysDiff}d)</span>
-                  <span className="font-semibold text-white">+${chauffeurFee}</span>
+                  <span className="font-semibold text-white">+${chauffeurFee} USD</span>
                 </div>
               )}
               {needAacPermit && (
                 <div className="flex justify-between text-xs text-slate-300">
-                  <span>Government Endorsed AAC Driving Permit</span>
-                  <span className="font-semibold text-white">+${permitFee}</span>
+                  <span>Government Endorsed AAC Driving Permit Handover</span>
+                  <span className="font-semibold text-white">+${permitFee} USD</span>
                 </div>
               )}
               <div className="flex justify-between text-xs text-emerald-400">
-                <span>BIA Terminal Gate Curbside Handover</span>
+                <span>BIA Terminal Gate Curbside Handover &amp; Unlimited Mileage</span>
                 <span className="font-bold">FREE ($0)</span>
               </div>
               <div className="pt-2 border-t border-slate-800 flex justify-between items-baseline">
                 <span className="text-sm font-bold text-slate-200">Total Estimated Quote:</span>
-                <span className="text-2xl font-black text-[#F59E0B]">${total}</span>
+                <span className="text-2xl font-black text-[#F59E0B]">${total} USD</span>
               </div>
             </div>
 
