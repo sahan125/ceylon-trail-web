@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ShieldCheck,
   Phone,
@@ -71,14 +72,14 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuoteModal }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           {/* Brand Logo */}
           <Link href="#hero" className="flex items-center gap-3 group">
-            <div className="w-11 h-11 rounded-lg bg-linear-to-br from-slate-900 to-[#08101E] flex flex-col items-center justify-center text-white shadow-md border border-slate-700/50">
-              <span className="text-base font-black tracking-widest text-amber-400 leading-none">
-                LT
-              </span>
-              <span className="text-[7px] text-slate-300 tracking-tighter uppercase font-semibold">
-                TRAILS
-              </span>
-            </div>
+            <Image
+              src="/images/logo.png"
+              alt="Lanka Trail"
+              width={160}
+              height={106}
+              priority
+              className="h-13 sm:h-14 w-auto object-contain shrink-0 group-hover:scale-105 transition-transform"
+            />
             <div className="flex flex-col">
               <div className="flex items-center gap-1">
                 <span className="font-black text-xl tracking-tight text-slate-950 font-sans group-hover:text-orange-600 transition-colors">

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Car,
   Clock,
@@ -371,8 +372,14 @@ export default function AdminDashboardPage() {
             </Link>
 
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-lg bg-orange-600 flex items-center justify-center font-black text-sm text-white shadow-xs">
-                LT
+              <div className="p-1 rounded-xl bg-white/95 flex items-center justify-center shadow-xs">
+                <Image
+                  src="/images/logo.png"
+                  alt="Lanka Trail"
+                  width={60}
+                  height={40}
+                  className="h-8 w-auto object-contain"
+                />
               </div>
               <div>
                 <div className="flex items-center gap-2">

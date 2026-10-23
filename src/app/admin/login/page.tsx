@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ShieldAlert,
   Lock,
@@ -75,8 +76,15 @@ export default function AdminLoginPage() {
         <div className="bg-slate-900/90 border border-slate-800/90 rounded-3xl p-8 sm:p-10 shadow-2xl backdrop-blur-xl space-y-6">
           {/* Header & Logo */}
           <div className="text-center space-y-2">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-orange-600 text-white font-black text-xl shadow-lg shadow-orange-600/30 mb-2">
-              LT
+            <div className="inline-flex items-center justify-center p-2.5 rounded-2xl bg-white shadow-xl shadow-orange-600/10 mb-2">
+              <Image
+                src="/images/logo.png"
+                alt="Lanka Trail"
+                width={90}
+                height={60}
+                priority
+                className="h-14 w-auto object-contain"
+              />
             </div>
             <div className="flex items-center justify-center gap-2">
               <h1 className="text-2xl font-black tracking-tight text-white">

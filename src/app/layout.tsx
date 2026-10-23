@@ -14,6 +14,11 @@ export const metadata: Metadata = {
     "Tourist car hire Sri Lanka",
     "lankatrails.lk",
   ],
+  icons: {
+    icon: "/images/logo.png",
+    shortcut: "/images/logo.png",
+    apple: "/images/logo.png",
+  },
 };
 
 export default function RootLayout({

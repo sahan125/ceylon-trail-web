@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import {
   MapPin,
   Phone,
@@ -29,8 +30,14 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Col 1: Brand Info (Span 4) */}
           <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-linear-to-br from-slate-900 to-[#08101E] border border-slate-700 flex items-center justify-center text-amber-400 font-black text-sm">
-                LT
+              <div className="bg-white/95 p-1 rounded-xl shadow-xs inline-flex items-center justify-center">
+                <Image
+                  src="/images/logo.png"
+                  alt="Lanka Trail"
+                  width={60}
+                  height={40}
+                  className="h-9 w-auto object-contain"
+                />
               </div>
               <span className="text-lg font-black tracking-tight text-white">
                 lankatrails.lk
