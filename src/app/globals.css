@@ -40,18 +40,23 @@ body {
   animation: pulse-subtle 2s infinite ease-in-out;
 }
 
-/* Leaflet Custom Travel UI */
+/* Leaflet Custom Travel UI - Dark Theme */
 .leaflet-popup-content-wrapper {
   border-radius: 1rem !important;
   padding: 0.25rem !important;
-  box-shadow: 0 12px 30px -4px rgba(8, 16, 30, 0.25), 0 4px 6px -2px rgba(8, 16, 30, 0.05) !important;
-  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  background: #08101e !important;
+  color: #ffffff !important;
+  box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.75), 0 4px 10px -2px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(56, 189, 248, 0.4) !important;
 }
 
 .leaflet-popup-tip {
-  background: #ffffff !important;
+  background: #08101e !important;
+  border-left: 1px solid rgba(56, 189, 248, 0.4) !important;
+  border-top: 1px solid rgba(56, 189, 248, 0.4) !important;
 }
 
 .leaflet-container {
   font-family: inherit !important;
+  background: #08101e !important;
 }

@@ -228,54 +228,69 @@ export const TourRouteMap: React.FC<TourRouteMapProps> = ({ tour, className = ""
         mapInstanceRef.current = null;
       }
 
-      // Default Sri Lanka center (approx. Dambulla/Central Province)
-      const sriLankaCenter: [number, number] = [7.2906, 80.6337];
+      // 1. Center of Sri Lanka with country-level zoom (zoom 7 to 8)
+      const sriLankaCenter: [number, number] = [7.8731, 80.7718];
+      const countryZoom = 7.4;
 
-      // 1. Initialize Leaflet Map
       const map = L.map(mapContainerRef.current, {
         center: sriLankaCenter,
-        zoom: 9,
+        zoom: countryZoom,
+        minZoom: 6,
+        maxZoom: 18,
         scrollWheelZoom: false, // Prevent page scroll interception
         zoomControl: true,
       });
 
       mapInstanceRef.current = map;
 
-      // 2. OpenStreetMap Standard Tile Layer
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>',
-        maxZoom: 18,
+      // 2. CartoDB Dark Matter Tile Layer
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
+        subdomains: "abcd",
+        maxZoom: 19,
         minZoom: 6,
       }).addTo(map);
 
-      // 3. Styled Route Polyline
+      // 3. Bright Glowing Light Route Polyline (Bright Cyan '#38bdf8')
       const latLngs: [number, number][] = waypoints.map((w) => [w.lat, w.lng]);
 
-      // Glow / outer shadow polyline
+      // Outer atmospheric glowing halo
       L.polyline(latLngs, {
-        color: "#EA580C",
-        weight: 8,
-        opacity: 0.25,
+        color: "#38bdf8",
+        weight: 10,
+        opacity: 0.3,
         lineCap: "round",
         lineJoin: "round",
       }).addTo(map);
 
-      // Main vibrant route polyline
-      const routeLine = L.polyline(latLngs, {
-        color: "#EA580C",
+      // Main bright cyan route line
+      L.polyline(latLngs, {
+        color: "#38bdf8",
         weight: 4,
         opacity: 0.95,
         lineCap: "round",
         lineJoin: "round",
-        dashArray: "6, 8", // Elegant dashed travel trajectory
+        dashArray: "6, 8",
       }).addTo(map);
 
-      // 4. Sequential Waypoint Markers with Popups
+      // Inner white core filament for neon trajectory
+      L.polyline(latLngs, {
+        color: "#f0f9ff",
+        weight: 1.5,
+        opacity: 0.85,
+        dashArray: "6, 8",
+      }).addTo(map);
+
+      // 4. Sequential Light-Colored Destination Markers with Dark Numbers
       const markers: any[] = [];
       waypoints.forEach((loc, index) => {
         const isStart = index === 0;
         const isEnd = index === waypoints.length - 1;
-        const badgeColor = isStart ? "#08101E" : isEnd ? "#EA580C" : "#0284C7";
+
+        // Light-colored backgrounds (bright white / warm light yellow)
+        const markerBg = isStart ? "#ffffff" : isEnd ? "#fef08a" : "#ffffff";
+        const accentBorder = isStart ? "#38bdf8" : isEnd ? "#fbbf24" : "#38bdf8";
 
         const customIcon = L.divIcon({
           className: "leaflet-tour-waypoint-marker",
@@ -285,55 +300,55 @@ export const TourRouteMap: React.FC<TourRouteMapProps> = ({ tour, className = ""
               display: flex;
               align-items: center;
               justify-content: center;
-              width: 30px;
-              height: 30px;
+              width: 32px;
+              height: 32px;
               border-radius: 9999px;
-              background-color: ${badgeColor};
-              color: #ffffff;
+              background-color: ${markerBg};
+              color: #08101e;
               font-family: ui-sans-serif, system-ui, sans-serif;
-              font-size: 12px;
-              font-weight: 800;
-              box-shadow: 0 4px 10px rgba(0,0,0,0.35);
-              border: 2.5px solid #ffffff;
+              font-size: 13px;
+              font-weight: 900;
+              box-shadow: 0 0 14px rgba(56, 189, 248, 0.65), 0 4px 12px rgba(0,0,0,0.85);
+              border: 2.5px solid ${accentBorder};
               cursor: pointer;
               transition: transform 0.2s ease;
             ">
               ${index + 1}
               <div style="
                 position: absolute;
-                bottom: -5px;
+                bottom: -6px;
                 left: 50%;
                 transform: translateX(-50%);
                 width: 0;
                 height: 0;
-                border-left: 4px solid transparent;
-                border-right: 4px solid transparent;
-                border-top: 5px solid ${badgeColor};
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-top: 6px solid ${markerBg};
               "></div>
             </div>
           `,
-          iconSize: [30, 35],
-          iconAnchor: [15, 35],
-          popupAnchor: [0, -35],
+          iconSize: [32, 38],
+          iconAnchor: [16, 38],
+          popupAnchor: [0, -38],
         });
 
         const popupHtml = `
-          <div style="font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 4px; min-width: 170px;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-              <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: ${badgeColor};">
-                ${isStart ? "🚩 Tour Start" : isEnd ? "🏁 Final Destination" : `📍 Stop ${index + 1} of ${waypoints.length}`}
+          <div style="font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 6px 4px; min-width: 180px; background-color: #08101e; color: #ffffff;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px;">
+              <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: ${accentBorder};">
+                ${isStart ? "🚩 Tour Start (Arrivals)" : isEnd ? "🏁 Tour Return (Departures)" : `📍 Stop ${index + 1} of ${waypoints.length}`}
               </span>
             </div>
-            <div style="font-size: 13px; font-weight: 800; color: #0f172a; line-height: 1.25;">
+            <div style="font-size: 13px; font-weight: 800; color: #ffffff; line-height: 1.3;">
               ${loc.name}
             </div>
             ${
               loc.description
-                ? `<div style="font-size: 11px; color: #475569; margin-top: 4px; line-height: 1.35;">${loc.description}</div>`
+                ? `<div style="font-size: 11px; color: #94a3b8; margin-top: 4px; line-height: 1.35;">${loc.description}</div>`
                 : ""
             }
-            <div style="font-size: 10px; color: #94a3b8; font-family: monospace; margin-top: 6px;">
-              Coordinates: ${loc.lat.toFixed(4)}, ${loc.lng.toFixed(4)}
+            <div style="font-size: 10px; color: #64748b; font-family: monospace; margin-top: 6px;">
+              GPS: ${loc.lat.toFixed(4)}, ${loc.lng.toFixed(4)}
             </div>
           </div>
         `;
@@ -353,29 +368,21 @@ export const TourRouteMap: React.FC<TourRouteMapProps> = ({ tour, className = ""
         markers.push(marker);
       });
 
-      // 5. Automatically fit bounds to route with responsive padding
-      if (latLngs.length > 0) {
-        const bounds = routeLine.getBounds();
-        map.fitBounds(bounds, {
-          padding: [35, 35],
-          maxZoom: 12,
-        });
-      }
+      // 5. Initial country-level view centered over Sri Lanka (zoom 7 to 8)
+      map.setView(sriLankaCenter, countryZoom);
 
-      // 6. Handle container sizing inside modals/animating elements
+      // Handle container sizing inside modals/animating elements
       const resizeTimer1 = setTimeout(() => {
         if (mapInstanceRef.current) {
           mapInstanceRef.current.invalidateSize();
-          mapInstanceRef.current.fitBounds(routeLine.getBounds(), {
-            padding: [35, 35],
-            maxZoom: 12,
-          });
+          mapInstanceRef.current.setView(sriLankaCenter, countryZoom);
         }
       }, 150);
 
       const resizeTimer2 = setTimeout(() => {
         if (mapInstanceRef.current) {
           mapInstanceRef.current.invalidateSize();
+          mapInstanceRef.current.setView(sriLankaCenter, countryZoom);
         }
       }, 500);
 
@@ -400,22 +407,15 @@ export const TourRouteMap: React.FC<TourRouteMapProps> = ({ tour, className = ""
     setActiveWaypoint(index);
     const target = waypoints[index];
     if (mapInstanceRef.current && target) {
-      mapInstanceRef.current.setView([target.lat, target.lng], 12, { animate: true });
+      mapInstanceRef.current.setView([target.lat, target.lng], 11, { animate: true });
     }
   };
 
   const handleResetView = () => {
     setActiveWaypoint(null);
-    if (mapInstanceRef.current && waypoints.length > 0) {
-      import("leaflet").then((L) => {
-        const latLngs: [number, number][] = waypoints.map((w) => [w.lat, w.lng]);
-        const bounds = L.latLngBounds(latLngs);
-        mapInstanceRef.current.fitBounds(bounds, {
-          padding: [35, 35],
-          maxZoom: 12,
-          animate: true,
-        });
-      });
+    if (mapInstanceRef.current) {
+      const sriLankaCenter: [number, number] = [7.8731, 80.7718];
+      mapInstanceRef.current.setView(sriLankaCenter, 7.4, { animate: true });
     }
   };
 
@@ -424,44 +424,44 @@ export const TourRouteMap: React.FC<TourRouteMapProps> = ({ tour, className = ""
       {/* Map Control Bar & Waypoint Quick Nav */}
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
-          <Navigation className="w-3.5 h-3.5 text-orange-600 shrink-0" />
+          <Navigation className="w-3.5 h-3.5 text-sky-500 shrink-0" />
           <span>Interactive Route Map</span>
           <span className="text-[10px] text-slate-500 font-medium">
-            ({waypoints.length} Tour Stops)
+            (Entire Island View • {waypoints.length} Stops)
           </span>
         </div>
 
         <button
           type="button"
           onClick={handleResetView}
-          className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-600 hover:text-orange-600 bg-slate-100 hover:bg-slate-200/80 px-2.5 py-1 rounded-md transition-colors cursor-pointer border border-slate-200"
+          className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-700 hover:text-sky-600 bg-slate-100 hover:bg-slate-200/80 px-2.5 py-1 rounded-md transition-colors cursor-pointer border border-slate-200"
         >
-          <Compass className="w-3 h-3 text-orange-500" />
-          <span>Fit Full Route</span>
+          <Compass className="w-3 h-3 text-sky-500" />
+          <span>Sri Lanka Island View</span>
         </button>
       </div>
 
-      {/* Responsive Map Container */}
-      <div className="relative w-full h-64 sm:h-72 md:h-80 rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-slate-100">
+      {/* Responsive Map Container with Dark Backdrop */}
+      <div className="relative w-full h-72 sm:h-80 md:h-96 rounded-2xl overflow-hidden border border-slate-800 shadow-xl bg-[#08101E]">
         <div ref={mapContainerRef} className="w-full h-full z-10" />
 
         {/* Ambient Loading Placeholder */}
         {!isMapReady && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center bg-slate-100 text-slate-400 text-xs font-medium">
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-[#08101E] text-slate-400 text-xs font-medium">
             Loading interactive route map...
           </div>
         )}
 
         {/* Mini Map Legend Overlay */}
-        <div className="absolute bottom-2.5 right-2.5 z-20 bg-white/90 backdrop-blur-md px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-xs text-[10px] text-slate-700 flex items-center gap-3 pointer-events-none">
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-[#08101E]" /> Start
+        <div className="absolute bottom-2.5 right-2.5 z-20 bg-[#08101E]/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-700/80 shadow-md text-[10px] text-slate-200 flex items-center gap-3 pointer-events-none">
+          <span className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-white border-2 border-[#38bdf8]" /> Start
           </span>
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-[#0284C7]" /> Stops
+          <span className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-white border-2 border-[#38bdf8]" /> Stops
           </span>
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-[#EA580C]" /> Finish
+          <span className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#fef08a] border-2 border-[#fbbf24]" /> Finish
           </span>
         </div>
       </div>
@@ -474,19 +474,19 @@ export const TourRouteMap: React.FC<TourRouteMapProps> = ({ tour, className = ""
             key={idx}
             type="button"
             onClick={() => handleFocusWaypoint(idx)}
-            className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full border transition-all cursor-pointer ${
+            className={`inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-full border transition-all cursor-pointer ${
               activeWaypoint === idx
-                ? "bg-orange-50 text-orange-700 border-orange-300 shadow-2xs"
+                ? "bg-sky-50 text-sky-700 border-sky-300 shadow-2xs"
                 : "bg-white text-slate-700 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
             }`}
           >
             <span
-              className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[9px] text-white ${
+              className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[9px] font-black text-slate-950 bg-white ${
                 idx === 0
-                  ? "bg-[#08101E]"
+                  ? "border border-[#38bdf8]"
                   : idx === waypoints.length - 1
-                  ? "bg-[#EA580C]"
-                  : "bg-[#0284C7]"
+                  ? "bg-[#fef08a] border border-[#fbbf24]"
+                  : "border border-[#38bdf8]"
               }`}
             >
               {idx + 1}
