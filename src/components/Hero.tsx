@@ -169,10 +169,10 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
           alt="Sri Lanka scenic mountains and tea country"
           fill
           priority
-          className="object-cover object-center brightness-45 scale-105 transition-transform duration-1000"
+          className="object-cover object-center brightness-80 scale-105 transition-transform duration-1000"
         />
-        {/* Dark Vignette Overlay for Readability */}
-        <div className="absolute inset-0 bg-linear-to-b from-black/80 via-black/60 to-[#08101E]/95" />
+        {/* Soft Contrast Overlay for Readability while keeping scenery clearly visible */}
+        <div className="absolute inset-0 bg-linear-to-b from-black/45 via-black/25 to-[#08101E]/70" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -184,13 +184,13 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
 
         {/* Hero Headlines */}
         <div className="max-w-4xl mb-8">
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.15]">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.15] drop-shadow-md">
             Explore Sri Lanka With{" "}
-            <span className="text-[#F59E0B] drop-shadow-md">Freedom</span>{" "}
+            <span className="text-[#F59E0B] drop-shadow-lg">Freedom</span>{" "}
             &amp; Unrivaled Confidence
           </h1>
 
-          <p className="mt-4 text-sm sm:text-base lg:text-lg text-slate-200 leading-relaxed font-normal max-w-3xl">
+          <p className="mt-4 text-sm sm:text-base lg:text-lg text-slate-100 leading-relaxed font-normal max-w-3xl drop-shadow-sm">
             Pristine vehicles delivered directly inside Katunayake Airport arrivals gate, English-fluent tourist chauffeurs, and legally certified self-drive permits ready before your flight lands.
           </p>
         </div>
