@@ -216,8 +216,37 @@ export const Hero: React.FC<HeroProps> = ({ onSearchFleet }) => {
           </div>
         </div>
 
-        {/* Booking / Dynamic Reservation Card */}
-        <div className="w-full bg-white rounded-2xl shadow-2xl p-4 sm:p-5 md:p-7 border border-slate-100 text-slate-800">
+        {/* Mobile Quick Action Buttons (Visible on mobile below stats, hidden on desktop md:hidden) */}
+        <div className="flex flex-col gap-3 w-full mb-6 md:hidden">
+          <a
+            href="https://wa.me/94714877742?text=Hello%20Lankatrails.lk!%20I%20would%20like%20to%20book%20a%20vehicle%20in%20Sri%20Lanka.%20Please%20let%20me%20know%20availability%20and%20rates."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full min-h-[48px] bg-[#25D366] hover:bg-[#20bd5a] text-white py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/40 active:scale-98 transition-all"
+          >
+            <MessageCircle className="w-4 h-4 fill-white" />
+            <span>Book via WhatsApp</span>
+          </a>
+
+          <div className="grid grid-cols-2 gap-3 w-full">
+            <a
+              href="#fleet"
+              className="w-full min-h-[44px] bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md px-3 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 active:scale-98 transition-all text-center"
+            >
+              <Car className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span>View Our Cars</span>
+            </a>
+            <a
+              href="#tours"
+              className="w-full min-h-[44px] bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md px-3 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 active:scale-98 transition-all text-center"
+            >
+              <span>Tour Packages</span>
+            </a>
+          </div>
+        </div>
+
+        {/* Booking / Dynamic Reservation Card (Hidden on mobile, preserved on desktop md:block) */}
+        <div className="hidden md:block w-full bg-white rounded-2xl shadow-2xl p-4 sm:p-5 md:p-7 border border-slate-100 text-slate-800">
           <form onSubmit={handleSubmit}>
             {/* Card Header: Tabs & Options */}
             <div className="flex flex-col lg:flex-row lg:items-center justify-between pb-5 border-b border-slate-100 gap-4">
